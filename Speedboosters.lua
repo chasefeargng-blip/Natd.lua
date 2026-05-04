@@ -1,7 +1,7 @@
 -- ============================================
--- NAT SEMI TP - v3.0 LOCKED & LOADED
--- Speed bypass | Lock icon | Clean layout
--- Discord: discord.gg/4cXDtZ2J4
+-- NAT SEMI TP - v3.1 FINAL LAYOUT
+-- Discord: discord.gg/4cXDtZ2J4 (copy button)
+-- Speed: 29 | Giant: 34 | Reset: 16
 -- ============================================
 
 local player = game.Players.LocalPlayer
@@ -19,7 +19,6 @@ local function setSpeed(v)
     end
 end
 
--- Forceer elke frame (Heartbeat) voor anti-speed bypass
 game:GetService("RunService").Heartbeat:Connect(function()
     if speedLock then setSpeed(activeSpeed) end
 end)
@@ -59,7 +58,6 @@ gui.Name = "NatSemiTP"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- Colors
 local bg = Color3.fromRGB(15,15,22)
 local grn = Color3.fromRGB(0,255,170)
 local pur = Color3.fromRGB(140,90,255)
@@ -71,7 +69,7 @@ local blu = Color3.fromRGB(88,101,242)
 local org = Color3.fromRGB(255,170,0)
 local pnk = Color3.fromRGB(255,100,180)
 
--- ===== MINIMIZE ICON (locked by default) =====
+-- ===== MINIMIZE ICON =====
 local ico = Instance.new("TextButton")
 ico.Size = UDim2.new(0,44,0,44)
 ico.Position = UDim2.new(0.02,0,0.02,0)
@@ -86,7 +84,7 @@ ico.ZIndex = 10
 ico.Parent = gui
 Instance.new("UICorner",ico).CornerRadius = UDim.new(1,0)
 
-local icoLocked = true   -- standaard vergrendeld
+local icoLocked = true   -- locked by default
 local dragging = false
 local moved = false
 local sPos, sFrame = nil, nil
@@ -102,7 +100,6 @@ ico.InputEnded:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
         dragging = false
         if not moved then
-            -- open de juiste frame
             if entered then main.Visible = true else sf.Visible = true end
             ico.Visible = false
         end
@@ -137,8 +134,8 @@ end)
 
 -- ===== START FRAME =====
 local sf = Instance.new("Frame")
-sf.Size = UDim2.new(0,340,0,200)
-sf.Position = UDim2.new(0.5,-170,0.5,-100)
+sf.Size = UDim2.new(0,340,0,180)
+sf.Position = UDim2.new(0.5,-170,0.5,-90)
 sf.BackgroundColor3 = bg
 sf.BorderSizePixel = 0
 sf.Active = true
@@ -151,7 +148,6 @@ local sfStroke = Instance.new("UIStroke")
 sfStroke.Color = grn; sfStroke.Thickness = 1.5; sfStroke.Transparency = 0.4
 sfStroke.Parent = sf
 
--- Header
 local sfHdr = Instance.new("Frame")
 sfHdr.Size = UDim2.new(1,0,0,46)
 sfHdr.BackgroundColor3 = Color3.fromRGB(10,10,16)
@@ -181,32 +177,24 @@ sfClose.Parent = sf
 Instance.new("UICorner",sfClose).CornerRadius = UDim.new(0,6)
 sfClose.MouseButton1Click:Connect(function() gui:Destroy() end)
 
--- Discord
+-- Join Discord text
 local dcLabel = Instance.new("TextLabel")
-dcLabel.Size = UDim2.new(1,-30,0,18)
-dcLabel.Position = UDim2.new(0,15,0,0.28)
-dcLabel.Text = "Join Discord for key:"
+dcLabel.Size = UDim2.new(1,-30,0,20)
+dcLabel.Position = UDim2.new(0,15,0,0.32)
+dcLabel.Text = "Join the Discord for the key:"
 dcLabel.TextColor3 = gry
 dcLabel.BackgroundTransparency = 1
 dcLabel.Font = Enum.Font.SourceSans; dcLabel.TextSize = 12
 dcLabel.Parent = sf
 
-local dcLink = Instance.new("TextLabel")
-dcLink.Size = UDim2.new(1,-30,0,22)
-dcLink.Position = UDim2.new(0,15,0,0.38)
-dcLink.Text = "discord.gg/4cXDtZ2J4"
-dcLink.TextColor3 = blu
-dcLink.BackgroundTransparency = 1
-dcLink.Font = Enum.Font.SourceSansBold; dcLink.TextSize = 13
-dcLink.Parent = sf
-
+-- Copy Discord button (no link label)
 local dcCopy = Instance.new("TextButton")
-dcCopy.Size = UDim2.new(0.88,0,0,30)
-dcCopy.Position = UDim2.new(0.06,0,0.52)
+dcCopy.Size = UDim2.new(0.88,0,0,34)
+dcCopy.Position = UDim2.new(0.06,0,0.48)
 dcCopy.Text = "COPY DISCORD LINK"
 dcCopy.BackgroundColor3 = blu
 dcCopy.TextColor3 = wht
-dcCopy.Font = Enum.Font.GothamBold; dcCopy.TextSize = 11
+dcCopy.Font = Enum.Font.GothamBold; dcCopy.TextSize = 12
 dcCopy.BorderSizePixel = 0
 dcCopy.Parent = sf
 Instance.new("UICorner",dcCopy).CornerRadius = UDim.new(0,7)
@@ -216,8 +204,9 @@ dcCopy.MouseButton1Click:Connect(function()
     wait(1.5); dcCopy.Text = "COPY DISCORD LINK"
 end)
 
+-- Enter Hub button
 local enterBtn = Instance.new("TextButton")
-enterBtn.Size = UDim2.new(0.88,0,0,36)
+enterBtn.Size = UDim2.new(0.88,0,0,38)
 enterBtn.Position = UDim2.new(0.06,0,0.7)
 enterBtn.Text = "ENTER HUB"
 enterBtn.BackgroundColor3 = grn
@@ -264,20 +253,18 @@ mainTitle.BackgroundTransparency = 1
 mainTitle.Font = Enum.Font.GothamBlack; mainTitle.TextSize = 18
 mainTitle.Parent = main
 
--- Aparte lock knop voor de GUI OPENER (icoon)
+-- Lock icon button (separate)
 local lockIcoBtn = Instance.new("TextButton")
 lockIcoBtn.Size = UDim2.new(0,28,0,28)
 lockIcoBtn.Position = UDim2.new(1,-106,0,9)
-lockIcoBtn.Text = "🔓"   -- staat nu unlocked (icoon is locked by default, dus deze toont of de icoon lock aan/uit)
-lockIcoBtn.BackgroundColor3 = red   -- rood = unlocked (icoon kan nu gesleept worden) maar we moeten de juiste logica aanpassen
+lockIcoBtn.Text = "🔒"
+lockIcoBtn.BackgroundColor3 = grn
 lockIcoBtn.TextColor3 = wht
 lockIcoBtn.Font = Enum.Font.GothamBold; lockIcoBtn.TextSize = 14
 lockIcoBtn.BorderSizePixel = 0; lockIcoBtn.AutoButtonColor = false
 lockIcoBtn.Parent = main
 Instance.new("UICorner",lockIcoBtn).CornerRadius = UDim.new(0,6)
 
--- Default: icoon staat locked (🔒), dus de button moet laten zien dat je kunt unlocken.
--- We passen het aan: icoLocked = true -> toon "🔒" en groene achtergrond; icoLocked = false -> toon "🔓" en rode achtergrond.
 local function updateLockButton()
     if icoLocked then
         lockIcoBtn.Text = "🔒"
@@ -391,4 +378,4 @@ rspBtn.Parent = main
 Instance.new("UICorner",rspBtn).CornerRadius = UDim.new(0,8)
 rspBtn.MouseButton1Click:Connect(function() fastRespawn() end)
 
-print("NAT SEMI TP v3.0 loaded!")
+print("NAT SEMI TP v3.1 Ready!")

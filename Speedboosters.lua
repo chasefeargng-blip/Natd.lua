@@ -1,14 +1,13 @@
 -- ============================================
--- NAT SEMI TP - v2.5 FINAL
--- Start screen + Lock + Speed bypass
--- Speed: 29 | Giant: 34 | Reset: 16
+-- NAT SEMI TP - v3.0 LOCKED & LOADED
+-- Speed bypass | Lock icon | Clean layout
 -- Discord: discord.gg/4cXDtZ2J4
 -- ============================================
 
 local player = game.Players.LocalPlayer
 local uis = game:GetService("UserInputService")
 
--- ===== SPEED SYSTEM =====
+-- ===== SPEED SYSTEM (Heartbeat bypass) =====
 local activeSpeed = 16
 local speedLock = false
 
@@ -20,11 +19,9 @@ local function setSpeed(v)
     end
 end
 
--- Bypass anti-speed (forceert elke 0.03s)
-spawn(function()
-    while wait(0.03) do
-        if speedLock then setSpeed(activeSpeed) end
-    end
+-- Forceer elke frame (Heartbeat) voor anti-speed bypass
+game:GetService("RunService").Heartbeat:Connect(function()
+    if speedLock then setSpeed(activeSpeed) end
 end)
 
 local function boost(v)
@@ -44,7 +41,6 @@ player.CharacterAdded:Connect(function(c)
     if speedLock then h.WalkSpeed = activeSpeed end
 end)
 
--- Fast respawn
 local function fastRespawn()
     spawn(function()
         pcall(function() if player.Character then player.Character:BreakJoints() end end)
@@ -75,7 +71,7 @@ local blu = Color3.fromRGB(88,101,242)
 local org = Color3.fromRGB(255,170,0)
 local pnk = Color3.fromRGB(255,100,180)
 
--- ===== MINIMIZE ICON =====
+-- ===== MINIMIZE ICON (locked by default) =====
 local ico = Instance.new("TextButton")
 ico.Size = UDim2.new(0,44,0,44)
 ico.Position = UDim2.new(0.02,0,0.02,0)
@@ -90,7 +86,7 @@ ico.ZIndex = 10
 ico.Parent = gui
 Instance.new("UICorner",ico).CornerRadius = UDim.new(1,0)
 
-local icoLocked = true  -- standaard vergrendeld
+local icoLocked = true   -- standaard vergrendeld
 local dragging = false
 local moved = false
 local sPos, sFrame = nil, nil
@@ -98,10 +94,7 @@ local sPos, sFrame = nil, nil
 ico.InputBegan:Connect(function(i)
     if icoLocked then return end
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        moved = false
-        sPos = i.Position
-        sFrame = ico.Position
+        dragging = true; moved = false; sPos = i.Position; sFrame = ico.Position
     end
 end)
 ico.InputEnded:Connect(function(i)
@@ -109,11 +102,8 @@ ico.InputEnded:Connect(function(i)
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
         dragging = false
         if not moved then
-            if entered then
-                main.Visible = true
-            else
-                sf.Visible = true
-            end
+            -- open de juiste frame
+            if entered then main.Visible = true else sf.Visible = true end
             ico.Visible = false
         end
     end
@@ -130,21 +120,16 @@ end)
 
 -- ===== N TOGGLE =====
 local guiVisible = true
-local entered = false  -- of we al op ENTER hebben gedrukt
+local entered = false
 uis.InputBegan:Connect(function(input,gpe)
     if gpe then return end
     if input.KeyCode == Enum.KeyCode.N then
         guiVisible = not guiVisible
         if guiVisible then
-            if entered then
-                main.Visible = true
-            else
-                sf.Visible = true
-            end
+            if entered then main.Visible = true else sf.Visible = true end
             ico.Visible = false
         else
-            sf.Visible = false
-            main.Visible = false
+            sf.Visible = false; main.Visible = false
             ico.Visible = true
         end
     end
@@ -152,8 +137,8 @@ end)
 
 -- ===== START FRAME =====
 local sf = Instance.new("Frame")
-sf.Size = UDim2.new(0,340,0,220)
-sf.Position = UDim2.new(0.5,-170,0.5,-110)
+sf.Size = UDim2.new(0,340,0,200)
+sf.Position = UDim2.new(0.5,-170,0.5,-100)
 sf.BackgroundColor3 = bg
 sf.BorderSizePixel = 0
 sf.Active = true
@@ -163,99 +148,94 @@ sf.Parent = gui
 Instance.new("UICorner",sf).CornerRadius = UDim.new(0,14)
 
 local sfStroke = Instance.new("UIStroke")
-sfStroke.Color = grn
-sfStroke.Thickness = 1.5
-sfStroke.Transparency = 0.4
+sfStroke.Color = grn; sfStroke.Thickness = 1.5; sfStroke.Transparency = 0.4
 sfStroke.Parent = sf
 
 -- Header
 local sfHdr = Instance.new("Frame")
-sfHdr.Size = UDim2.new(1,0,0,50)
+sfHdr.Size = UDim2.new(1,0,0,46)
 sfHdr.BackgroundColor3 = Color3.fromRGB(10,10,16)
 sfHdr.BorderSizePixel = 0
 sfHdr.Parent = sf
 Instance.new("UICorner",sfHdr).CornerRadius = UDim.new(0,14)
 
 local sfTitle = Instance.new("TextLabel")
-sfTitle.Size = UDim2.new(1,-40,0,50)
+sfTitle.Size = UDim2.new(1,-40,0,46)
 sfTitle.Position = UDim2.new(0,15,0,0)
 sfTitle.Text = "NAT SEMI TP"
 sfTitle.TextColor3 = wht
 sfTitle.BackgroundTransparency = 1
 sfTitle.Font = Enum.Font.GothamBlack
-sfTitle.TextSize = 19
+sfTitle.TextSize = 18
 sfTitle.Parent = sf
 
--- Close (Start)
 local sfClose = Instance.new("TextButton")
 sfClose.Size = UDim2.new(0,26,0,26)
-sfClose.Position = UDim2.new(1,-34,0,12)
+sfClose.Position = UDim2.new(1,-34,0,10)
 sfClose.Text = "X"
 sfClose.BackgroundColor3 = red
 sfClose.TextColor3 = wht
-sfClose.Font = Enum.Font.GothamBold
-sfClose.TextSize = 14
-sfClose.BorderSizePixel = 0
-sfClose.AutoButtonColor = false
+sfClose.Font = Enum.Font.GothamBold; sfClose.TextSize = 14
+sfClose.BorderSizePixel = 0; sfClose.AutoButtonColor = false
 sfClose.Parent = sf
 Instance.new("UICorner",sfClose).CornerRadius = UDim.new(0,6)
 sfClose.MouseButton1Click:Connect(function() gui:Destroy() end)
 
--- Discord tekst
-local dcTitle = Instance.new("TextLabel")
-dcTitle.Size = UDim2.new(1,-30,0,20)
-dcTitle.Position = UDim2.new(0,15,0,0.27)
-dcTitle.Text = "Join Discord group for key:"
-dcTitle.TextColor3 = gry
-dcTitle.BackgroundTransparency = 1
-dcTitle.Font = Enum.Font.SourceSans
-dcTitle.TextSize = 12
-dcTitle.Parent = sf
+-- Discord
+local dcLabel = Instance.new("TextLabel")
+dcLabel.Size = UDim2.new(1,-30,0,18)
+dcLabel.Position = UDim2.new(0,15,0,0.28)
+dcLabel.Text = "Join Discord for key:"
+dcLabel.TextColor3 = gry
+dcLabel.BackgroundTransparency = 1
+dcLabel.Font = Enum.Font.SourceSans; dcLabel.TextSize = 12
+dcLabel.Parent = sf
 
 local dcLink = Instance.new("TextLabel")
-dcLink.Size = UDim2.new(1,-30,0,24)
+dcLink.Size = UDim2.new(1,-30,0,22)
 dcLink.Position = UDim2.new(0,15,0,0.38)
 dcLink.Text = "discord.gg/4cXDtZ2J4"
 dcLink.TextColor3 = blu
 dcLink.BackgroundTransparency = 1
-dcLink.Font = Enum.Font.SourceSansBold
-dcLink.TextSize = 13
+dcLink.Font = Enum.Font.SourceSansBold; dcLink.TextSize = 13
 dcLink.Parent = sf
 
-local dcCopyBtn = Instance.new("TextButton")
-dcCopyBtn.Size = UDim2.new(0.88,0,0,30)
-dcCopyBtn.Position = UDim2.new(0.06,0,0.52)
-dcCopyBtn.Text = "COPY DISCORD LINK"
-dcCopyBtn.BackgroundColor3 = blu
-dcCopyBtn.TextColor3 = wht
-dcCopyBtn.Font = Enum.Font.GothamBold
-dcCopyBtn.TextSize = 11
-dcCopyBtn.BorderSizePixel = 0
-dcCopyBtn.Parent = sf
-Instance.new("UICorner",dcCopyBtn).CornerRadius = UDim.new(0,7)
-dcCopyBtn.MouseButton1Click:Connect(function()
+local dcCopy = Instance.new("TextButton")
+dcCopy.Size = UDim2.new(0.88,0,0,30)
+dcCopy.Position = UDim2.new(0.06,0,0.52)
+dcCopy.Text = "COPY DISCORD LINK"
+dcCopy.BackgroundColor3 = blu
+dcCopy.TextColor3 = wht
+dcCopy.Font = Enum.Font.GothamBold; dcCopy.TextSize = 11
+dcCopy.BorderSizePixel = 0
+dcCopy.Parent = sf
+Instance.new("UICorner",dcCopy).CornerRadius = UDim.new(0,7)
+dcCopy.MouseButton1Click:Connect(function()
     pcall(function() setclipboard("https://discord.gg/4cXDtZ2J4") end)
-    dcCopyBtn.Text = "COPIED!"
-    wait(1.5)
-    dcCopyBtn.Text = "COPY DISCORD LINK"
+    dcCopy.Text = "COPIED!"
+    wait(1.5); dcCopy.Text = "COPY DISCORD LINK"
 end)
 
 local enterBtn = Instance.new("TextButton")
 enterBtn.Size = UDim2.new(0.88,0,0,36)
-enterBtn.Position = UDim2.new(0.06,0,0.68)
+enterBtn.Position = UDim2.new(0.06,0,0.7)
 enterBtn.Text = "ENTER HUB"
 enterBtn.BackgroundColor3 = grn
 enterBtn.TextColor3 = Color3.fromRGB(0,0,0)
-enterBtn.Font = Enum.Font.GothamBlack
-enterBtn.TextSize = 14
+enterBtn.Font = Enum.Font.GothamBlack; enterBtn.TextSize = 14
 enterBtn.BorderSizePixel = 0
 enterBtn.Parent = sf
 Instance.new("UICorner",enterBtn).CornerRadius = UDim.new(0,8)
+enterBtn.MouseButton1Click:Connect(function()
+    sf.Visible = false
+    main.Visible = true
+    entered = true
+end)
 
 -- ===== MAIN HUB FRAME =====
 local main = Instance.new("Frame")
-main.Size = UDim2.new(0,340,0,270)
-main.Position = UDim2.new(0.5,-170,0.5,-135)
+main.Size = UDim2.new(0,340,0,260)
+main.Position = UDim2.new(0.5,-170,0.5,-130)
 main.BackgroundColor3 = bg
 main.BorderSizePixel = 0
 main.Active = true
@@ -265,67 +245,64 @@ main.Parent = gui
 Instance.new("UICorner",main).CornerRadius = UDim.new(0,14)
 
 local mainStroke = Instance.new("UIStroke")
-mainStroke.Color = grn
-mainStroke.Thickness = 1.5
-mainStroke.Transparency = 0.4
+mainStroke.Color = grn; mainStroke.Thickness = 1.5; mainStroke.Transparency = 0.4
 mainStroke.Parent = main
 
 local mainHdr = Instance.new("Frame")
-mainHdr.Size = UDim2.new(1,0,0,50)
+mainHdr.Size = UDim2.new(1,0,0,46)
 mainHdr.BackgroundColor3 = Color3.fromRGB(10,10,16)
 mainHdr.BorderSizePixel = 0
 mainHdr.Parent = main
 Instance.new("UICorner",mainHdr).CornerRadius = UDim.new(0,14)
 
 local mainTitle = Instance.new("TextLabel")
-mainTitle.Size = UDim2.new(1,-100,0,50)
+mainTitle.Size = UDim2.new(1,-110,0,46)
 mainTitle.Position = UDim2.new(0,15,0,0)
 mainTitle.Text = "NAT SEMI TP"
 mainTitle.TextColor3 = wht
 mainTitle.BackgroundTransparency = 1
-mainTitle.Font = Enum.Font.GothamBlack
-mainTitle.TextSize = 18
+mainTitle.Font = Enum.Font.GothamBlack; mainTitle.TextSize = 18
 mainTitle.Parent = main
 
--- Lock Button (apart)
-local lockBtn = Instance.new("TextButton")
-lockBtn.Size = UDim2.new(0,28,0,28)
-lockBtn.Position = UDim2.new(1,-100,0,11)
-lockBtn.Text = "🔒"
-lockBtn.BackgroundColor3 = org
-lockBtn.TextColor3 = wht
-lockBtn.Font = Enum.Font.GothamBold
-lockBtn.TextSize = 14
-lockBtn.BorderSizePixel = 0
-lockBtn.AutoButtonColor = false
-lockBtn.Parent = main
-Instance.new("UICorner",lockBtn).CornerRadius = UDim.new(0,6)
+-- Aparte lock knop voor de GUI OPENER (icoon)
+local lockIcoBtn = Instance.new("TextButton")
+lockIcoBtn.Size = UDim2.new(0,28,0,28)
+lockIcoBtn.Position = UDim2.new(1,-106,0,9)
+lockIcoBtn.Text = "🔓"   -- staat nu unlocked (icoon is locked by default, dus deze toont of de icoon lock aan/uit)
+lockIcoBtn.BackgroundColor3 = red   -- rood = unlocked (icoon kan nu gesleept worden) maar we moeten de juiste logica aanpassen
+lockIcoBtn.TextColor3 = wht
+lockIcoBtn.Font = Enum.Font.GothamBold; lockIcoBtn.TextSize = 14
+lockIcoBtn.BorderSizePixel = 0; lockIcoBtn.AutoButtonColor = false
+lockIcoBtn.Parent = main
+Instance.new("UICorner",lockIcoBtn).CornerRadius = UDim.new(0,6)
 
-local isLocked = false  -- start unlocked, dus GUI beweegbaar
-lockBtn.MouseButton1Click:Connect(function()
-    isLocked = not isLocked
-    icoLocked = isLocked
-    main.Draggable = not isLocked
-    if isLocked then
-        lockBtn.Text = "🔓"
-        lockBtn.BackgroundColor3 = red
+-- Default: icoon staat locked (🔒), dus de button moet laten zien dat je kunt unlocken.
+-- We passen het aan: icoLocked = true -> toon "🔒" en groene achtergrond; icoLocked = false -> toon "🔓" en rode achtergrond.
+local function updateLockButton()
+    if icoLocked then
+        lockIcoBtn.Text = "🔒"
+        lockIcoBtn.BackgroundColor3 = grn
     else
-        lockBtn.Text = "🔒"
-        lockBtn.BackgroundColor3 = org
+        lockIcoBtn.Text = "🔓"
+        lockIcoBtn.BackgroundColor3 = red
     end
+end
+updateLockButton()
+
+lockIcoBtn.MouseButton1Click:Connect(function()
+    icoLocked = not icoLocked
+    updateLockButton()
 end)
 
 -- Minimize
 local minBtn = Instance.new("TextButton")
 minBtn.Size = UDim2.new(0,26,0,26)
-minBtn.Position = UDim2.new(1,-66,0,12)
+minBtn.Position = UDim2.new(1,-72,0,10)
 minBtn.Text = "_"
 minBtn.BackgroundColor3 = org
 minBtn.TextColor3 = wht
-minBtn.Font = Enum.Font.GothamBlack
-minBtn.TextSize = 16
-minBtn.BorderSizePixel = 0
-minBtn.AutoButtonColor = false
+minBtn.Font = Enum.Font.GothamBlack; minBtn.TextSize = 16
+minBtn.BorderSizePixel = 0; minBtn.AutoButtonColor = false
 minBtn.Parent = main
 Instance.new("UICorner",minBtn).CornerRadius = UDim.new(0,6)
 minBtn.MouseButton1Click:Connect(function()
@@ -336,27 +313,24 @@ end)
 -- Close
 local mainClose = Instance.new("TextButton")
 mainClose.Size = UDim2.new(0,26,0,26)
-mainClose.Position = UDim2.new(1,-34,0,12)
+mainClose.Position = UDim2.new(1,-34,0,10)
 mainClose.Text = "X"
 mainClose.BackgroundColor3 = red
 mainClose.TextColor3 = wht
-mainClose.Font = Enum.Font.GothamBold
-mainClose.TextSize = 14
-mainClose.BorderSizePixel = 0
-mainClose.AutoButtonColor = false
+mainClose.Font = Enum.Font.GothamBold; mainClose.TextSize = 14
+mainClose.BorderSizePixel = 0; mainClose.AutoButtonColor = false
 mainClose.Parent = main
 Instance.new("UICorner",mainClose).CornerRadius = UDim.new(0,6)
 mainClose.MouseButton1Click:Connect(function() gui:Destroy() end)
 
--- Speed Boost Section
+-- Speed section
 local spdLabel = Instance.new("TextLabel")
 spdLabel.Size = UDim2.new(1,-30,0,18)
 spdLabel.Position = UDim2.new(0,15,0,0.22)
 spdLabel.Text = "🏃 SPEED BOOST"
 spdLabel.TextColor3 = grn
 spdLabel.BackgroundTransparency = 1
-spdLabel.Font = Enum.Font.GothamBold
-spdLabel.TextSize = 12
+spdLabel.Font = Enum.Font.GothamBold; spdLabel.TextSize = 12
 spdLabel.Parent = main
 
 local spdBtn = Instance.new("TextButton")
@@ -365,8 +339,7 @@ spdBtn.Position = UDim2.new(0.06,0,0.3)
 spdBtn.Text = "SPEED BOOST (29)"
 spdBtn.BackgroundColor3 = grn
 spdBtn.TextColor3 = Color3.fromRGB(0,0,0)
-spdBtn.Font = Enum.Font.GothamBlack
-spdBtn.TextSize = 13
+spdBtn.Font = Enum.Font.GothamBlack; spdBtn.TextSize = 13
 spdBtn.BorderSizePixel = 0
 spdBtn.Parent = main
 Instance.new("UICorner",spdBtn).CornerRadius = UDim.new(0,8)
@@ -378,8 +351,7 @@ giantBtn.Position = UDim2.new(0.06,0,0.44)
 giantBtn.Text = "GIANT SPEED (34)"
 giantBtn.BackgroundColor3 = pur
 giantBtn.TextColor3 = wht
-giantBtn.Font = Enum.Font.GothamBlack
-giantBtn.TextSize = 13
+giantBtn.Font = Enum.Font.GothamBlack; giantBtn.TextSize = 13
 giantBtn.BorderSizePixel = 0
 giantBtn.Parent = main
 Instance.new("UICorner",giantBtn).CornerRadius = UDim.new(0,8)
@@ -391,22 +363,20 @@ resetBtn.Position = UDim2.new(0.06,0,0.58)
 resetBtn.Text = "RESET SPEED (16)"
 resetBtn.BackgroundColor3 = red
 resetBtn.TextColor3 = wht
-resetBtn.Font = Enum.Font.GothamBlack
-resetBtn.TextSize = 13
+resetBtn.Font = Enum.Font.GothamBlack; resetBtn.TextSize = 13
 resetBtn.BorderSizePixel = 0
 resetBtn.Parent = main
 Instance.new("UICorner",resetBtn).CornerRadius = UDim.new(0,8)
 resetBtn.MouseButton1Click:Connect(function() resetSpd() end)
 
--- Respawn Section
+-- Respawn section
 local rspLabel = Instance.new("TextLabel")
 rspLabel.Size = UDim2.new(1,-30,0,18)
 rspLabel.Position = UDim2.new(0,15,0,0.72)
 rspLabel.Text = "💀 RESPAWN"
 rspLabel.TextColor3 = pnk
 rspLabel.BackgroundTransparency = 1
-rspLabel.Font = Enum.Font.GothamBold
-rspLabel.TextSize = 12
+rspLabel.Font = Enum.Font.GothamBold; rspLabel.TextSize = 12
 rspLabel.Parent = main
 
 local rspBtn = Instance.new("TextButton")
@@ -415,18 +385,10 @@ rspBtn.Position = UDim2.new(0.06,0,0.8)
 rspBtn.Text = "FAST RESPAWN (0.5s)"
 rspBtn.BackgroundColor3 = pnk
 rspBtn.TextColor3 = wht
-rspBtn.Font = Enum.Font.GothamBlack
-rspBtn.TextSize = 12
+rspBtn.Font = Enum.Font.GothamBlack; rspBtn.TextSize = 12
 rspBtn.BorderSizePixel = 0
 rspBtn.Parent = main
 Instance.new("UICorner",rspBtn).CornerRadius = UDim.new(0,8)
 rspBtn.MouseButton1Click:Connect(function() fastRespawn() end)
 
--- ENTER button actie
-enterBtn.MouseButton1Click:Connect(function()
-    sf.Visible = false
-    main.Visible = true
-    entered = true
-end)
-
-print("NAT SEMI TP v2.5 Final loaded!")
+print("NAT SEMI TP v3.0 loaded!")

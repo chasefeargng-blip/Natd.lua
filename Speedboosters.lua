@@ -1,20 +1,25 @@
 -- ============================================
--- NATHUB x D4VE - PREMIUM v2.5 | Delta Ready
--- Key: Davey | Speed: 29 | Giant: 34
+-- NAT SEMI TP - SPEED BOOST
+-- Discord: discord.gg/4cXDtZ2J4
+-- Speed: 29 | Giant: 34 | Reset: 16
 -- ============================================
 
 local player = game.Players.LocalPlayer
 
--- Key
-local key = "Davey"
-local unlocked = false
-if readfile and pcall(function() return readfile("NatD4Key.txt") end) then
-    if readfile("NatD4Key.txt") == key then unlocked = true end
+-- Speed functie
+local function setSpeed(v)
+    local char = player.Character
+    if char then
+        local hum = char:FindFirstChild("Humanoid")
+        if hum then
+            hum.WalkSpeed = v
+        end
+    end
 end
 
 -- GUI
 local gui = Instance.new("ScreenGui")
-gui.Name = "NatD4"
+gui.Name = "NatSemiTP"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
@@ -26,127 +31,79 @@ local dark = Color3.fromRGB(22, 22, 32)
 local gray = Color3.fromRGB(130, 130, 145)
 local red = Color3.fromRGB(255, 55, 65)
 
--- ===== KEY FRAME =====
-local kf = Instance.new("Frame")
-kf.Size = UDim2.new(0, 280, 0, 200)
-kf.Position = UDim2.new(0.5, -140, 0.5, -100)
-kf.BackgroundColor3 = bg
-kf.BorderSizePixel = 0
-kf.Visible = not unlocked
-kf.Active = true
-kf.Draggable = true
-kf.Parent = gui
-Instance.new("UICorner", kf).CornerRadius = UDim.new(0, 12)
+-- ===== START FRAME (Discord) =====
+local sf = Instance.new("Frame")
+sf.Size = UDim2.new(0, 280, 0, 160)
+sf.Position = UDim2.new(0.5, -140, 0.5, -80)
+sf.BackgroundColor3 = bg
+sf.BorderSizePixel = 0
+sf.Active = true
+sf.Draggable = true
+sf.Parent = gui
+Instance.new("UICorner", sf).CornerRadius = UDim.new(0, 12)
 
-local kfs = Instance.new("UIStroke")
-kfs.Color = accent
-kfs.Thickness = 1
-kfs.Transparency = 0.5
-kfs.Parent = kf
+local sfs = Instance.new("UIStroke")
+sfs.Color = accent
+sfs.Thickness = 1
+sfs.Transparency = 0.5
+sfs.Parent = sf
 
-local kh = Instance.new("Frame")
-kh.Size = UDim2.new(1, 0, 0, 42)
-kh.BackgroundColor3 = Color3.fromRGB(10, 10, 16)
-kh.BorderSizePixel = 0
-kh.Parent = kf
-Instance.new("UICorner", kh).CornerRadius = UDim.new(0, 12)
+local sh = Instance.new("Frame")
+sh.Size = UDim2.new(1, 0, 0, 42)
+sh.BackgroundColor3 = Color3.fromRGB(10, 10, 16)
+sh.BorderSizePixel = 0
+sh.Parent = sf
+Instance.new("UICorner", sh).CornerRadius = UDim.new(0, 12)
 
-local kt = Instance.new("TextLabel")
-kt.Size = UDim2.new(1, -20, 0, 42)
-kt.Position = UDim2.new(0, 10, 0, 0)
-kt.Text = "NATHUB x D4VE"
-kt.TextColor3 = white
-kt.BackgroundTransparency = 1
-kt.Font = Enum.Font.GothamBlack
-kt.TextSize = 14
-kt.Parent = kf
+local st = Instance.new("TextLabel")
+st.Size = UDim2.new(1, -20, 0, 42)
+st.Position = UDim2.new(0, 10, 0, 0)
+st.Text = "NAT SEMI TP"
+st.TextColor3 = white
+st.BackgroundTransparency = 1
+st.Font = Enum.Font.GothamBlack
+st.TextSize = 15
+st.Parent = sf
 
-local kt2 = Instance.new("TextLabel")
-kt2.Size = UDim2.new(1, -20, 0, 14)
-kt2.Position = UDim2.new(0, 10, 0, 0.24)
-kt2.Text = "v2.5 PREMIUM"
-kt2.TextColor3 = accent
-kt2.BackgroundTransparency = 1
-kt2.Font = Enum.Font.GothamBold
-kt2.TextSize = 8
-kt2.Parent = kf
+local st2 = Instance.new("TextLabel")
+st2.Size = UDim2.new(1, -20, 0, 14)
+st2.Position = UDim2.new(0, 10, 0, 0.32)
+st2.Text = "Join our Discord:"
+st2.TextColor3 = gray
+st2.BackgroundTransparency = 1
+st2.Font = Enum.Font.SourceSans
+st2.TextSize = 11
+st2.Parent = sf
 
 local dc = Instance.new("TextLabel")
-dc.Size = UDim2.new(1, -20, 0, 14)
-dc.Position = UDim2.new(0, 10, 0, 0.36)
-dc.Text = "Key in Discord:"
-dc.TextColor3 = gray
+dc.Size = UDim2.new(1, -20, 0, 18)
+dc.Position = UDim2.new(0, 10, 0, 0.44)
+dc.Text = "discord.gg/4cXDtZ2J4"
+dc.TextColor3 = Color3.fromRGB(88, 101, 242)
 dc.BackgroundTransparency = 1
-dc.Font = Enum.Font.SourceSans
-dc.TextSize = 10
-dc.Parent = kf
+dc.Font = Enum.Font.SourceSansBold
+dc.TextSize = 11
+dc.Parent = sf
 
-local dc1 = Instance.new("TextLabel")
-dc1.Size = UDim2.new(1, -20, 0, 14)
-dc1.Position = UDim2.new(0, 10, 0, 0.44)
-dc1.Text = "discord.gg/kqfvs9ndJ"
-dc1.TextColor3 = Color3.fromRGB(88, 101, 242)
-dc1.BackgroundTransparency = 1
-dc1.Font = Enum.Font.SourceSansBold
-dc1.TextSize = 9
-dc1.Parent = kf
-
-local dc2 = Instance.new("TextLabel")
-dc2.Size = UDim2.new(1, -20, 0, 14)
-dc2.Position = UDim2.new(0, 10, 0, 0.52)
-dc2.Text = "discord.gg/z2H9a75UZn"
-dc2.TextColor3 = Color3.fromRGB(88, 101, 242)
-dc2.BackgroundTransparency = 1
-dc2.Font = Enum.Font.SourceSansBold
-dc2.TextSize = 9
-dc2.Parent = kf
-
-local ki = Instance.new("TextBox")
-ki.Size = UDim2.new(0.85, 0, 0, 34)
-ki.Position = UDim2.new(0.075, 0, 0.63)
-ki.PlaceholderText = "Enter key..."
-ki.Text = ""
-ki.BackgroundColor3 = dark
-ki.TextColor3 = white
-ki.Font = Enum.Font.SourceSans
-ki.TextSize = 12
-ki.BorderSizePixel = 0
-ki.Parent = kf
-Instance.new("UICorner", ki).CornerRadius = UDim.new(0, 7)
-
-local ku = Instance.new("TextButton")
-ku.Size = UDim2.new(0.85, 0, 0, 36)
-ku.Position = UDim2.new(0.075, 0, 0.78)
-ku.Text = "UNLOCK"
-ku.BackgroundColor3 = accent
-ku.TextColor3 = Color3.fromRGB(0, 0, 0)
-ku.Font = Enum.Font.GothamBlack
-ku.TextSize = 12
-ku.BorderSizePixel = 0
-ku.Parent = kf
-Instance.new("UICorner", ku).CornerRadius = UDim.new(0, 7)
-
-ku.MouseButton1Click:Connect(function()
-    if ki.Text == key then
-        unlocked = true
-        if writefile then pcall(function() writefile("NatD4Key.txt", key) end) end
-        kf.Visible = false
-        main.Visible = true
-    else
-        ki.Text = ""
-        ki.PlaceholderText = "Invalid key"
-        wait(1)
-        ki.PlaceholderText = "Enter key..."
-    end
-end)
+local enter = Instance.new("TextButton")
+enter.Size = UDim2.new(0.85, 0, 0, 38)
+enter.Position = UDim2.new(0.075, 0, 0.65)
+enter.Text = "ENTER"
+enter.BackgroundColor3 = accent
+enter.TextColor3 = Color3.fromRGB(0, 0, 0)
+enter.Font = Enum.Font.GothamBlack
+enter.TextSize = 13
+enter.BorderSizePixel = 0
+enter.Parent = sf
+Instance.new("UICorner", enter).CornerRadius = UDim.new(0, 8)
 
 -- ===== MAIN FRAME =====
 local main = Instance.new("Frame")
-main.Size = UDim2.new(0, 280, 0, 130)
-main.Position = UDim2.new(0.5, -140, 0.5, -65)
+main.Size = UDim2.new(0, 280, 0, 170)
+main.Position = UDim2.new(0.5, -140, 0.5, -85)
 main.BackgroundColor3 = bg
 main.BorderSizePixel = 0
-main.Visible = unlocked
+main.Visible = false
 main.Active = true
 main.Draggable = true
 main.Parent = gui
@@ -188,38 +145,50 @@ cb.Parent = main
 Instance.new("UICorner", cb).CornerRadius = UDim.new(0, 6)
 cb.MouseButton1Click:Connect(function() gui:Destroy() end)
 
--- Speed Boost knop (29)
+-- Enter knop actie
+enter.MouseButton1Click:Connect(function()
+    sf.Visible = false
+    main.Visible = true
+end)
+
+-- Speed Boost (29)
 local sp = Instance.new("TextButton")
-sp.Size = UDim2.new(0.85, 0, 0, 38)
-sp.Position = UDim2.new(0.075, 0, 0.35)
+sp.Size = UDim2.new(0.85, 0, 0, 34)
+sp.Position = UDim2.new(0.075, 0, 0.28)
 sp.Text = "SPEED BOOST (29)"
 sp.BackgroundColor3 = accent
 sp.TextColor3 = Color3.fromRGB(0, 0, 0)
 sp.Font = Enum.Font.GothamBlack
-sp.TextSize = 13
+sp.TextSize = 12
 sp.BorderSizePixel = 0
 sp.Parent = main
 Instance.new("UICorner", sp).CornerRadius = UDim.new(0, 8)
-sp.MouseButton1Click:Connect(function()
-    if player.Character and player.Character:FindFirstChild("Humanoid") then
-        player.Character.Humanoid.WalkSpeed = 29
-    end
-end)
+sp.MouseButton1Click:Connect(function() setSpeed(29) end)
 
--- Giant knop (34)
+-- Giant Speed (34)
 local gp = Instance.new("TextButton")
-gp.Size = UDim2.new(0.85, 0, 0, 38)
-gp.Position = UDim2.new(0.075, 0, 0.6)
+gp.Size = UDim2.new(0.85, 0, 0, 34)
+gp.Position = UDim2.new(0.075, 0, 0.48)
 gp.Text = "GIANT SPEED (34)"
 gp.BackgroundColor3 = accent2
 gp.TextColor3 = white
 gp.Font = Enum.Font.GothamBlack
-gp.TextSize = 13
+gp.TextSize = 12
 gp.BorderSizePixel = 0
 gp.Parent = main
 Instance.new("UICorner", gp).CornerRadius = UDim.new(0, 8)
-gp.MouseButton1Click:Connect(function()
-    if player.Character and player.Character:FindFirstChild("Humanoid") then
-        player.Character.Humanoid.WalkSpeed = 34
-    end
-end)
+gp.MouseButton1Click:Connect(function() setSpeed(34) end)
+
+-- Reset (16)
+local rp = Instance.new("TextButton")
+rp.Size = UDim2.new(0.85, 0, 0, 34)
+rp.Position = UDim2.new(0.075, 0, 0.68)
+rp.Text = "RESET SPEED (16)"
+rp.BackgroundColor3 = red
+rp.TextColor3 = white
+rp.Font = Enum.Font.GothamBlack
+rp.TextSize = 12
+rp.BorderSizePixel = 0
+rp.Parent = main
+Instance.new("UICorner", rp).CornerRadius = UDim.new(0, 8)
+rp.MouseButton1Click:Connect(function() setSpeed(16) end)

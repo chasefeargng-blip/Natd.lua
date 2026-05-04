@@ -1,1 +1,357 @@
-local a=game.Players.LocalPlayer local b=game:GetService("UserInputService")local c="Davey"local d=false if readfile and pcall(function()return readfile("D4veHub_Key.txt")end)then if readfile("D4veHub_Key.txt")==c then d=true end end local e=Instance.new("ScreenGui")e.Name="D4veNAT"e.ResetOnSpawn=false e.Parent=a:WaitForChild("PlayerGui")local function f()local g=a.Character return g and g:FindFirstChild("Humanoid")end local function h(i)local j=f()if j then j.WalkSpeed=i end end local k=Instance.new("TextButton")k.Size=UDim2.new(0,42,0,42)k.Position=UDim2.new(0.02,0,0.02,0)k.Text="D4"k.BackgroundColor3=Color3.fromRGB(0,255,170)k.TextColor3=Color3.fromRGB(0,0,0)k.Font=Enum.Font.GothamBlack k.TextSize=14 k.Visible=false k.Parent=e Instance.new("UICorner",k).CornerRadius=UDim.new(1,0)local l,m,n,o=false,false,nil,nil k.InputBegan:Connect(function(p)if p.UserInputType==Enum.UserInputType.MouseButton1 or p.UserInputType==Enum.UserInputType.Touch then l,m,n,o=true,false,p.Position,k.Position end end)k.InputEnded:Connect(function(p)if p.UserInputType==Enum.UserInputType.MouseButton1 or p.UserInputType==Enum.UserInputType.Touch then l=false if not m then q.Visible,k.Visible=true,false end end end)b.InputChanged:Connect(function(p)if l and(p.UserInputType==Enum.UserInputType.MouseMovement or p.UserInputType==Enum.UserInputType.Touch)then local r=p.Position-n if math.abs(r.X)>2 or math.abs(r.Y)>2 then m=true end k.Position=UDim2.new(o.X.Scale,o.X.Offset+r.X,o.Y.Scale,o.Y.Offset+r.Y)end end)local s=Instance.new("Frame")s.Size=UDim2.new(0,250,0,200)s.Position=UDim2.new(0.5,-125,0.5,-100)s.BackgroundColor3=Color3.fromRGB(22,22,30)s.Visible=not d s.Active=true s.Draggable=true s.Parent=e Instance.new("UICorner",s).CornerRadius=UDim.new(0,14)local t=Instance.new("TextLabel")t.Size=UDim2.new(1,-20,0,30)t.Position=UDim2.new(0,10,0,10)t.Text="D4VE HUB x NATHUB"t.TextColor3=Color3.fromRGB(0,255,170)t.BackgroundTransparency=1 t.Font=Enum.Font.GothamBlack t.TextSize=13 t.Parent=s local u=Instance.new("TextLabel")u.Size=UDim2.new(1,-20,0,16)u.Position=UDim2.new(0,10,0,40)u.Text="Join Discord for Key:"u.TextColor3=Color3.fromRGB(180,180,180)u.BackgroundTransparency=1 u.Font=Enum.Font.SourceSans u.TextSize=10 u.Parent=s local v=Instance.new("TextButton")v.Size=UDim2.new(1,-20,0,22)v.Position=UDim2.new(0,10,0,56)v.Text="discord.gg/kqfvs9ndJ"v.BackgroundColor3=Color3.fromRGB(88,101,242)v.TextColor3=Color3.fromRGB(255,255,255)v.Font=Enum.Font.SourceSans v.TextSize=9 v.Parent=s local w=Instance.new("TextButton")w.Size=UDim2.new(1,-20,0,22)w.Position=UDim2.new(0,10,0,78)w.Text="discord.gg/z2H9a75UZn"w.BackgroundColor3=Color3.fromRGB(88,101,242)w.TextColor3=Color3.fromRGB(255,255,255)w.Font=Enum.Font.SourceSans w.TextSize=9 w.Parent=s local x=Instance.new("TextBox")x.Size=UDim2.new(1,-20,0,30)x.Position=UDim2.new(0,10,0,108)x.PlaceholderText="Enter key..."x.Text=""x.BackgroundColor3=Color3.fromRGB(50,50,60)x.TextColor3=Color3.fromRGB(255,255,255)x.Font=Enum.Font.SourceSans x.TextSize=12 x.Parent=s local y=Instance.new("TextButton")y.Size=UDim2.new(1,-20,0,30)y.Position=UDim2.new(0,10,0,145)y.Text="UNLOCK"y.BackgroundColor3=Color3.fromRGB(0,170,255)y.TextColor3=Color3.fromRGB(255,255,255)y.Font=Enum.Font.GothamBlack y.TextSize=14 y.Parent=s y.MouseButton1Click:Connect(function()if x.Text==c then d=true if writefile then pcall(function()writefile("D4veHub_Key.txt",c)end)end s.Visible=false q.Visible=true else x.Text=""x.PlaceholderText="Wrong key!"wait(1.5)x.PlaceholderText="Enter key..."end end)local q=Instance.new("Frame")q.Size=UDim2.new(0,250,0,170)q.Position=UDim2.new(0.5,-125,0.5,-85)q.BackgroundColor3=Color3.fromRGB(22,22,30)q.Visible=d q.Active=true q.Draggable=true q.Parent=e Instance.new("UICorner",q).CornerRadius=UDim.new(0,14)local z=Instance.new("TextLabel")z.Size=UDim2.new(1,-20,0,30)z.Position=UDim2.new(0,10,0,10)z.Text="SPEED BOOST"z.TextColor3=Color3.fromRGB(0,255,170)z.BackgroundTransparency=1 z.Font=Enum.Font.GothamBlack z.TextSize=14 z.Parent=q local A=Instance.new("TextButton")A.Size=UDim2.new(0,22,0,22)A.Position=UDim2.new(1,-28,0,4)A.Text="X"A.BackgroundColor3=Color3.fromRGB(255,50,50)A.TextColor3=Color3.fromRGB(255,255,255)A.Font=Enum.Font.GothamBold A.TextSize=12 A.Parent=q Instance.new("UICorner",A).CornerRadius=UDim.new(0,5)A.MouseButton1Click:Connect(function()e:Destroy()end)local B=Instance.new("TextButton")B.Size=UDim2.new(0,22,0,22)B.Position=UDim2.new(1,-52,0,4)B.Text="_"B.BackgroundColor3=Color3.fromRGB(255,170,0)B.TextColor3=Color3.fromRGB(255,255,255)B.Font=Enum.Font.GothamBlack B.TextSize=14 B.Parent=q Instance.new("UICorner",B).CornerRadius=UDim.new(0,5)B.MouseButton1Click:Connect(function()q.Visible,k.Visible=false,true end)local C=Instance.new("TextBox")C.Size=UDim2.new(1,-20,0,32)C.Position=UDim2.new(0,10,0,45)C.Text="29"C.PlaceholderText="Speed (16-30)"C.BackgroundColor3=Color3.fromRGB(50,50,60)C.TextColor3=Color3.fromRGB(255,255,255)C.Font=Enum.Font.SourceSans C.TextSize=13 C.Parent=q local D=Instance.new("TextButton")D.Size=UDim2.new(1,-20,0,30)D.Position=UDim2.new(0,10,0,80)D.Text="SET SPEED"D.BackgroundColor3=Color3.fromRGB(0,200,130)D.TextColor3=Color3.fromRGB(255,255,255)D.Font=Enum.Font.GothamBold D.TextSize=13 D.Parent=q D.MouseButton1Click:Connect(function()local E=tonumber(C.Text)if E and E>=16 and E<=30 then h(E)end end)local F=Instance.new("TextBox")F.Size=UDim2.new(1,-20,0,32)F.Position=UDim2.new(0,10,0,118)F.Text="12"F.PlaceholderText="Giant (10-34.5)"F.BackgroundColor3=Color3.fromRGB(50,50,60)F.TextColor3=Color3.fromRGB(255,255,255)F.Font=Enum.Font.SourceSans F.TextSize=13 F.Parent=q local G=Instance.new("TextButton")G.Size=UDim2.new(1,-20,0,30)G.Position=UDim2.new(0,10,0,153)G.Text="SET GIANT SPEED"G.BackgroundColor3=Color3.fromRGB(100,60,255)G.TextColor3=Color3.fromRGB(255,255,255)G.Font=Enum.Font.GothamBold G.TextSize=13 G.Parent=q G.MouseButton1Click:Connect(function()local E=tonumber(F.Text)if E and E>=10 and E<=34.5 then h(E)end end)
+-- ============================================
+-- NATHUB x D4VE - ULTRA PREMIUM ANIMATED
+-- Key: Davey | Smooth Animations | Cinema Feel
+-- ============================================
+
+local player = game.Players.LocalPlayer
+local uis = game:GetService("UserInputService")
+local ts = game:GetService("TweenService")
+local ti = TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+-- Key
+local key = "Davey"
+local unlocked = false
+if readfile and pcall(function() return readfile("NatD4Key.txt") end) then
+    if readfile("NatD4Key.txt") == key then unlocked = true end
+end
+
+-- GUI
+local gui = Instance.new("ScreenGui")
+gui.Name = "NatD4Premium"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local function getHum()
+    local c = player.Character
+    return c and c:FindFirstChild("Humanoid")
+end
+
+local function setSpeed(v)
+    local h = getHum()
+    if h then h.WalkSpeed = v end
+end
+
+-- Colors
+local bg = Color3.fromRGB(12, 12, 18)
+local accent = Color3.fromRGB(0, 255, 170)
+local accent2 = Color3.fromRGB(140, 80, 255)
+local gold = Color3.fromRGB(255, 200, 60)
+local white = Color3.fromRGB(255, 255, 255)
+local dark = Color3.fromRGB(20, 20, 28)
+local red = Color3.fromRGB(255, 55, 65)
+
+-- ===== ANIMATION HELPERS =====
+local function fadeIn(obj)
+    obj.BackgroundTransparency = 1
+    if obj:IsA("TextLabel") or obj:IsA("TextButton") then obj.TextTransparency = 1 end
+    obj.Position = obj.Position + UDim2.new(0, 0, 0, 30)
+    ts:Create(obj, ti, {BackgroundTransparency = 0}):Play()
+    if obj:IsA("TextLabel") or obj:IsA("TextButton") then ts:Create(obj, ti, {TextTransparency = 0}):Play() end
+    ts:Create(obj, ti, {Position = obj.Position - UDim2.new(0, 0, 0, 30)}):Play()
+end
+
+local function pulse(obj)
+    spawn(function()
+        while obj and obj.Parent do
+            ts:Create(obj, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Size = obj.Size + UDim2.new(0, 4, 0, 4)}):Play()
+            wait(1)
+            ts:Create(obj, TweenInfo.new(1, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {Size = obj.Size - UDim2.new(0, 4, 0, 4)}):Play()
+            wait(1)
+        end
+    end)
+end
+
+-- ===== KEY FRAME =====
+local kf = Instance.new("Frame")
+kf.Size = UDim2.new(0, 300, 0, 210)
+kf.Position = UDim2.new(0.5, -150, 0.5, -135)
+kf.BackgroundColor3 = bg
+kf.BorderSizePixel = 0
+kf.BackgroundTransparency = 1
+kf.Visible = not unlocked
+kf.Active = true
+kf.Draggable = true
+kf.Parent = gui
+
+Instance.new("UICorner", kf).CornerRadius = UDim.new(0, 16)
+local kfs = Instance.new("UIStroke")
+kfs.Color = accent
+kfs.Thickness = 1
+kfs.Transparency = 0.6
+kfs.Parent = kf
+
+-- Glow top
+local g1 = Instance.new("Frame")
+g1.Size = UDim2.new(1, 0, 0, 2)
+g1.BackgroundColor3 = accent
+g1.BorderSizePixel = 0
+g1.Parent = kf
+
+-- Glow bottom
+local g2 = Instance.new("Frame")
+g2.Size = UDim2.new(1, 0, 0, 2)
+g2.Position = UDim2.new(0, 0, 1, -2)
+g2.BackgroundColor3 = accent
+g2.BorderSizePixel = 0
+g2.Parent = kf
+
+-- Title
+local kt = Instance.new("TextLabel")
+kt.Size = UDim2.new(1, 0, 0, 45)
+kt.Text = "NATHUB x D4VE"
+kt.TextColor3 = white
+kt.BackgroundColor3 = Color3.fromRGB(8, 8, 14)
+kt.Font = Enum.Font.GothamBlack
+kt.TextSize = 16
+kt.TextTransparency = 1
+kt.Parent = kf
+Instance.new("UICorner", kt).CornerRadius = UDim.new(0, 16)
+
+local kt2 = Instance.new("TextLabel")
+kt2.Size = UDim2.new(1, 0, 0, 16)
+kt2.Position = UDim2.new(0, 0, 0.24, 0)
+kt2.Text = "✦ PREMIUM ACCESS ✦"
+kt2.TextColor3 = gold
+kt2.BackgroundTransparency = 1
+kt2.Font = Enum.Font.GothamBold
+kt2.TextSize = 9
+kt2.TextTransparency = 1
+kt2.Parent = kf
+
+local dc = Instance.new("TextLabel")
+dc.Size = UDim2.new(1, 0, 0, 14)
+dc.Position = UDim2.new(0, 0, 0.35, 0)
+dc.Text = "Join for key: discord.gg/kqfvs9ndJ"
+dc.TextColor3 = Color3.fromRGB(160, 160, 180)
+dc.BackgroundTransparency = 1
+dc.Font = Enum.Font.SourceSans
+dc.TextSize = 10
+dc.TextTransparency = 1
+dc.Parent = kf
+
+local dc2 = Instance.new("TextLabel")
+dc2.Size = UDim2.new(1, 0, 0, 14)
+dc2.Position = UDim2.new(0, 0, 0.42, 0)
+dc2.Text = "discord.gg/z2H9a75UZn"
+dc2.TextColor3 = Color3.fromRGB(160, 160, 180)
+dc2.BackgroundTransparency = 1
+dc2.Font = Enum.Font.SourceSans
+dc2.TextSize = 10
+dc2.TextTransparency = 1
+dc2.Parent = kf
+
+local ki = Instance.new("TextBox")
+ki.Size = UDim2.new(0.85, 0, 0, 36)
+ki.Position = UDim2.new(0.075, 0, 0.55, 0)
+ki.PlaceholderText = "Enter key..."
+ki.Text = ""
+ki.BackgroundColor3 = dark
+ki.TextColor3 = white
+ki.Font = Enum.Font.SourceSans
+ki.TextSize = 12
+ki.BorderSizePixel = 0
+ki.BackgroundTransparency = 1
+ki.TextTransparency = 1
+ki.Parent = kf
+Instance.new("UICorner", ki).CornerRadius = UDim.new(0, 8)
+
+local ku = Instance.new("TextButton")
+ku.Size = UDim2.new(0.85, 0, 0, 38)
+ku.Position = UDim2.new(0.075, 0, 0.75, 0)
+ku.Text = "AUTHENTICATE"
+ku.BackgroundColor3 = accent
+ku.TextColor3 = Color3.fromRGB(0, 0, 0)
+ku.Font = Enum.Font.GothamBlack
+ku.TextSize = 13
+ku.BorderSizePixel = 0
+ku.BackgroundTransparency = 1
+ku.TextTransparency = 1
+ku.Parent = kf
+Instance.new("UICorner", ku).CornerRadius = UDim.new(0, 8)
+
+-- Animate key frame in
+fadeIn(kf)
+fadeIn(kt)
+fadeIn(kt2)
+fadeIn(dc)
+fadeIn(dc2)
+fadeIn(ki)
+fadeIn(ku)
+pulse(ku)
+
+ku.MouseButton1Click:Connect(function()
+    if ki.Text == key then
+        unlocked = true
+        if writefile then pcall(function() writefile("NatD4Key.txt", key) end) end
+        
+        -- Animate out
+        ts:Create(kf, TweenInfo.new(0.5), {BackgroundTransparency = 1, Position = kf.Position + UDim2.new(0, 0, 0, -60)}):Play()
+        for _, v in pairs(kf:GetChildren()) do
+            if v:IsA("TextLabel") or v:IsA("TextButton") then
+                ts:Create(v, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+            end
+        end
+        wait(0.5)
+        kf.Visible = false
+        main.Visible = true
+        
+        -- Animate main in
+        spawn(function()
+            for _, v in pairs(main:GetChildren()) do
+                if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+                    fadeIn(v)
+                end
+            end
+        end)
+    else
+        ki.Text = ""
+        ki.PlaceholderText = "Invalid key"
+        wait(1)
+        ki.PlaceholderText = "Enter key..."
+    end
+end)
+
+-- ===== MAIN FRAME =====
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0, 300, 0, 170)
+main.Position = UDim2.new(0.5, -150, 0.5, -105)
+main.BackgroundColor3 = bg
+main.BorderSizePixel = 0
+main.BackgroundTransparency = 1
+main.Visible = unlocked
+main.Active = true
+main.Draggable = true
+main.Parent = gui
+
+Instance.new("UICorner", main).CornerRadius = UDim.new(0, 16)
+local ms = Instance.new("UIStroke")
+ms.Color = accent
+ms.Thickness = 1
+ms.Transparency = 0.6
+ms.Parent = main
+
+-- Glows
+local mg1 = Instance.new("Frame")
+mg1.Size = UDim2.new(1, 0, 0, 2)
+mg1.BackgroundColor3 = accent
+mg1.Parent = main
+local mg2 = Instance.new("Frame")
+mg2.Size = UDim2.new(1, 0, 0, 2)
+mg2.Position = UDim2.new(0, 0, 1, -2)
+mg2.BackgroundColor3 = accent
+mg2.Parent = main
+
+-- Title
+local mt = Instance.new("TextLabel")
+mt.Size = UDim2.new(1, 0, 0, 45)
+mt.Text = "✦ SPEED BOOST ✦"
+mt.TextColor3 = white
+mt.BackgroundColor3 = Color3.fromRGB(8, 8, 14)
+mt.Font = Enum.Font.GothamBlack
+mt.TextSize = 15
+mt.TextTransparency = 1
+mt.Parent = main
+Instance.new("UICorner", mt).CornerRadius = UDim.new(0, 16)
+
+-- Close
+local cb = Instance.new("TextButton")
+cb.Size = UDim2.new(0, 26, 0, 26)
+cb.Position = UDim2.new(1, -34, 0, 10)
+cb.Text = "×"
+cb.TextColor3 = white
+cb.BackgroundColor3 = red
+cb.Font = Enum.Font.GothamBold
+cb.TextSize = 18
+cb.BorderSizePixel = 0
+cb.AutoButtonColor = false
+cb.BackgroundTransparency = 1
+cb.TextTransparency = 1
+cb.Parent = main
+Instance.new("UICorner", cb).CornerRadius = UDim.new(0, 7)
+cb.MouseButton1Click:Connect(function() gui:Destroy() end)
+
+-- Speed Input
+local si = Instance.new("TextBox")
+si.Size = UDim2.new(0.44, 0, 0, 36)
+si.Position = UDim2.new(0.04, 0, 0.35, 0)
+si.Text = "29"
+si.PlaceholderText = "Speed"
+si.BackgroundColor3 = dark
+si.TextColor3 = white
+si.Font = Enum.Font.SourceSans
+si.TextSize = 14
+si.BorderSizePixel = 0
+si.BackgroundTransparency = 1
+si.TextTransparency = 1
+si.Parent = main
+Instance.new("UICorner", si).CornerRadius = UDim.new(0, 8)
+
+local sp = Instance.new("TextButton")
+sp.Size = UDim2.new(0.44, 0, 0, 36)
+sp.Position = UDim2.new(0.52, 0, 0.35, 0)
+sp.Text = "BOOST"
+sp.BackgroundColor3 = accent
+sp.TextColor3 = Color3.fromRGB(0, 0, 0)
+sp.Font = Enum.Font.GothamBlack
+sp.TextSize = 13
+sp.BorderSizePixel = 0
+sp.BackgroundTransparency = 1
+sp.TextTransparency = 1
+sp.Parent = main
+Instance.new("UICorner", sp).CornerRadius = UDim.new(0, 8)
+sp.MouseButton1Click:Connect(function()
+    local v = tonumber(si.Text)
+    if v and v >= 16 and v <= 30 then setSpeed(v) end
+end)
+
+-- Giant Input
+local gi = Instance.new("TextBox")
+gi.Size = UDim2.new(0.44, 0, 0, 36)
+gi.Position = UDim2.new(0.04, 0, 0.6, 0)
+gi.Text = "12"
+gi.PlaceholderText = "Giant"
+gi.BackgroundColor3 = dark
+gi.TextColor3 = white
+gi.Font = Enum.Font.SourceSans
+gi.TextSize = 14
+gi.BorderSizePixel = 0
+gi.BackgroundTransparency = 1
+gi.TextTransparency = 1
+gi.Parent = main
+Instance.new("UICorner", gi).CornerRadius = UDim.new(0, 8)
+
+local gp = Instance.new("TextButton")
+gp.Size = UDim2.new(0.44, 0, 0, 36)
+gp.Position = UDim2.new(0.52, 0, 0.6, 0)
+gp.Text = "GIANT"
+gp.BackgroundColor3 = accent2
+gp.TextColor3 = white
+gp.Font = Enum.Font.GothamBlack
+gp.TextSize = 13
+gp.BorderSizePixel = 0
+gp.BackgroundTransparency = 1
+gp.TextTransparency = 1
+gp.Parent = main
+Instance.new("UICorner", gp).CornerRadius = UDim.new(0, 8)
+gp.MouseButton1Click:Connect(function()
+    local v = tonumber(gi.Text)
+    if v and v >= 10 and v <= 34.5 then setSpeed(v) end
+end)
+
+-- Pulse the buttons
+pulse(sp)
+pulse(gp)
+
+-- Initial fade in for main
+if unlocked then
+    spawn(function()
+        fadeIn(main)
+        for _, v in pairs(main:GetChildren()) do
+            if v:IsA("TextLabel") or v:IsA("TextButton") or v:IsA("TextBox") then
+                fadeIn(v)
+            end
+        end
+    end)
+end
+
+print("✦ NATHUB x D4VE Premium Loaded ✦")

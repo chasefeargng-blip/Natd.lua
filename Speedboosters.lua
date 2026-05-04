@@ -1,7 +1,8 @@
 -- ============================================
--- NAT SEMI TP - v3.1 FINAL LAYOUT
+-- NAT SEMI TP - v3.4 FULL VISIBLE + BYPASS
 -- Discord: discord.gg/4cXDtZ2J4 (copy button)
 -- Speed: 29 | Giant: 34 | Reset: 16
+-- Heartbeat bypass actief!
 -- ============================================
 
 local player = game.Players.LocalPlayer
@@ -19,6 +20,7 @@ local function setSpeed(v)
     end
 end
 
+-- Bypass elk frame
 game:GetService("RunService").Heartbeat:Connect(function()
     if speedLock then setSpeed(activeSpeed) end
 end)
@@ -84,7 +86,7 @@ ico.ZIndex = 10
 ico.Parent = gui
 Instance.new("UICorner",ico).CornerRadius = UDim.new(1,0)
 
-local icoLocked = true   -- locked by default
+local icoLocked = true
 local dragging = false
 local moved = false
 local sPos, sFrame = nil, nil
@@ -177,7 +179,6 @@ sfClose.Parent = sf
 Instance.new("UICorner",sfClose).CornerRadius = UDim.new(0,6)
 sfClose.MouseButton1Click:Connect(function() gui:Destroy() end)
 
--- Join Discord text
 local dcLabel = Instance.new("TextLabel")
 dcLabel.Size = UDim2.new(1,-30,0,20)
 dcLabel.Position = UDim2.new(0,15,0,0.32)
@@ -187,7 +188,6 @@ dcLabel.BackgroundTransparency = 1
 dcLabel.Font = Enum.Font.SourceSans; dcLabel.TextSize = 12
 dcLabel.Parent = sf
 
--- Copy Discord button (no link label)
 local dcCopy = Instance.new("TextButton")
 dcCopy.Size = UDim2.new(0.88,0,0,34)
 dcCopy.Position = UDim2.new(0.06,0,0.48)
@@ -204,7 +204,6 @@ dcCopy.MouseButton1Click:Connect(function()
     wait(1.5); dcCopy.Text = "COPY DISCORD LINK"
 end)
 
--- Enter Hub button
 local enterBtn = Instance.new("TextButton")
 enterBtn.Size = UDim2.new(0.88,0,0,38)
 enterBtn.Position = UDim2.new(0.06,0,0.7)
@@ -216,15 +215,15 @@ enterBtn.BorderSizePixel = 0
 enterBtn.Parent = sf
 Instance.new("UICorner",enterBtn).CornerRadius = UDim.new(0,8)
 enterBtn.MouseButton1Click:Connect(function()
+    entered = true
     sf.Visible = false
     main.Visible = true
-    entered = true
 end)
 
--- ===== MAIN HUB FRAME =====
+-- ===== MAIN HUB (groter, zodat alles past) =====
 local main = Instance.new("Frame")
-main.Size = UDim2.new(0,340,0,260)
-main.Position = UDim2.new(0.5,-170,0.5,-130)
+main.Size = UDim2.new(0,340,0,310)  -- verhoogd van 260 naar 310
+main.Position = UDim2.new(0.5,-170,0.5,-155)
 main.BackgroundColor3 = bg
 main.BorderSizePixel = 0
 main.Active = true
@@ -245,7 +244,7 @@ mainHdr.Parent = main
 Instance.new("UICorner",mainHdr).CornerRadius = UDim.new(0,14)
 
 local mainTitle = Instance.new("TextLabel")
-mainTitle.Size = UDim2.new(1,-110,0,46)
+mainTitle.Size = UDim2.new(1,-120,0,46)
 mainTitle.Position = UDim2.new(0,15,0,0)
 mainTitle.Text = "NAT SEMI TP"
 mainTitle.TextColor3 = wht
@@ -253,10 +252,10 @@ mainTitle.BackgroundTransparency = 1
 mainTitle.Font = Enum.Font.GothamBlack; mainTitle.TextSize = 18
 mainTitle.Parent = main
 
--- Lock icon button (separate)
+-- Lock icon button
 local lockIcoBtn = Instance.new("TextButton")
 lockIcoBtn.Size = UDim2.new(0,28,0,28)
-lockIcoBtn.Position = UDim2.new(1,-106,0,9)
+lockIcoBtn.Position = UDim2.new(1,-110,0,9)
 lockIcoBtn.Text = "🔒"
 lockIcoBtn.BackgroundColor3 = grn
 lockIcoBtn.TextColor3 = wht
@@ -281,10 +280,10 @@ lockIcoBtn.MouseButton1Click:Connect(function()
     updateLockButton()
 end)
 
--- Minimize
+-- Minimize + Close
 local minBtn = Instance.new("TextButton")
 minBtn.Size = UDim2.new(0,26,0,26)
-minBtn.Position = UDim2.new(1,-72,0,10)
+minBtn.Position = UDim2.new(1,-76,0,10)
 minBtn.Text = "_"
 minBtn.BackgroundColor3 = org
 minBtn.TextColor3 = wht
@@ -297,7 +296,6 @@ minBtn.MouseButton1Click:Connect(function()
     ico.Visible = true
 end)
 
--- Close
 local mainClose = Instance.new("TextButton")
 mainClose.Size = UDim2.new(0,26,0,26)
 mainClose.Position = UDim2.new(1,-34,0,10)
@@ -310,10 +308,12 @@ mainClose.Parent = main
 Instance.new("UICorner",mainClose).CornerRadius = UDim.new(0,6)
 mainClose.MouseButton1Click:Connect(function() gui:Destroy() end)
 
--- Speed section
+-- ===== NU ALLES ZICHTBAAR =====
+-- Door de grotere main en de nieuwe posities is er genoeg ruimte.
+
 local spdLabel = Instance.new("TextLabel")
 spdLabel.Size = UDim2.new(1,-30,0,18)
-spdLabel.Position = UDim2.new(0,15,0,0.22)
+spdLabel.Position = UDim2.new(0,15,0,0.19)
 spdLabel.Text = "🏃 SPEED BOOST"
 spdLabel.TextColor3 = grn
 spdLabel.BackgroundTransparency = 1
@@ -322,7 +322,7 @@ spdLabel.Parent = main
 
 local spdBtn = Instance.new("TextButton")
 spdBtn.Size = UDim2.new(0.88,0,0,34)
-spdBtn.Position = UDim2.new(0.06,0,0.3)
+spdBtn.Position = UDim2.new(0.06,0,0.26)
 spdBtn.Text = "SPEED BOOST (29)"
 spdBtn.BackgroundColor3 = grn
 spdBtn.TextColor3 = Color3.fromRGB(0,0,0)
@@ -334,7 +334,7 @@ spdBtn.MouseButton1Click:Connect(function() boost(29) end)
 
 local giantBtn = Instance.new("TextButton")
 giantBtn.Size = UDim2.new(0.88,0,0,34)
-giantBtn.Position = UDim2.new(0.06,0,0.44)
+giantBtn.Position = UDim2.new(0.06,0,0.39)
 giantBtn.Text = "GIANT SPEED (34)"
 giantBtn.BackgroundColor3 = pur
 giantBtn.TextColor3 = wht
@@ -346,7 +346,7 @@ giantBtn.MouseButton1Click:Connect(function() boost(34) end)
 
 local resetBtn = Instance.new("TextButton")
 resetBtn.Size = UDim2.new(0.88,0,0,34)
-resetBtn.Position = UDim2.new(0.06,0,0.58)
+resetBtn.Position = UDim2.new(0.06,0,0.52)
 resetBtn.Text = "RESET SPEED (16)"
 resetBtn.BackgroundColor3 = red
 resetBtn.TextColor3 = wht
@@ -356,10 +356,10 @@ resetBtn.Parent = main
 Instance.new("UICorner",resetBtn).CornerRadius = UDim.new(0,8)
 resetBtn.MouseButton1Click:Connect(function() resetSpd() end)
 
--- Respawn section
+-- Respawn
 local rspLabel = Instance.new("TextLabel")
 rspLabel.Size = UDim2.new(1,-30,0,18)
-rspLabel.Position = UDim2.new(0,15,0,0.72)
+rspLabel.Position = UDim2.new(0,15,0,0.65)
 rspLabel.Text = "💀 RESPAWN"
 rspLabel.TextColor3 = pnk
 rspLabel.BackgroundTransparency = 1
@@ -368,7 +368,7 @@ rspLabel.Parent = main
 
 local rspBtn = Instance.new("TextButton")
 rspBtn.Size = UDim2.new(0.88,0,0,34)
-rspBtn.Position = UDim2.new(0.06,0,0.8)
+rspBtn.Position = UDim2.new(0.06,0,0.72)
 rspBtn.Text = "FAST RESPAWN (0.5s)"
 rspBtn.BackgroundColor3 = pnk
 rspBtn.TextColor3 = wht
@@ -378,4 +378,4 @@ rspBtn.Parent = main
 Instance.new("UICorner",rspBtn).CornerRadius = UDim.new(0,8)
 rspBtn.MouseButton1Click:Connect(function() fastRespawn() end)
 
-print("NAT SEMI TP v3.1 Ready!")
+print("NAT SEMI TP v3.4 - All visible & Heartbeat bypass!")

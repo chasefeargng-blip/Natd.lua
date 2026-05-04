@@ -1,7 +1,8 @@
 -- ============================================
--- NAT SEMI TP - SPEED BOOST + RESPAWN + SPEED LOCK
+-- NAT SEMI TP - v2.5 FINAL
+-- Speed: 29 | Giant: 34 | Reset: 16
 -- Discord: discord.gg/4cXDtZ2J4
--- N toggles GUI | Minimize | Copy Discord
+-- Lock GUI positie | N toggle | Minimize
 -- ============================================
 
 local player = game.Players.LocalPlayer
@@ -9,62 +10,41 @@ local uis = game:GetService("UserInputService")
 
 -- Speed functie
 local function setSpeed(v)
-    local char = player.Character
-    if char then
-        local hum = char:FindFirstChild("Humanoid")
-        if hum then
-            hum.WalkSpeed = v
-        end
+    local c = player.Character
+    if c then
+        local h = c:FindFirstChild("Humanoid")
+        if h then h.WalkSpeed = v end
     end
 end
 
--- Speed locker bypass
-local speedLocked = false
-local lockedSpeed = 16
+-- Speed locker
+local activeSpeed = 16
+local speedLock = false
+spawn(function() while wait(0.05) do if speedLock then setSpeed(activeSpeed) end end end)
 
-spawn(function()
-    while true do
-        if speedLocked then
-            setSpeed(lockedSpeed)
-        end
-        wait(0.1)
-    end
-end)
-
-local function applySpeed(v)
-    lockedSpeed = v
-    speedLocked = true
+local function boost(v)
+    activeSpeed = v
+    speedLock = true
     setSpeed(v)
 end
 
-local function resetSpeed()
-    speedLocked = false
-    lockedSpeed = 16
+local function resetSpd()
+    speedLock = false
+    activeSpeed = 16
     setSpeed(16)
 end
 
--- Auto respawn speed reset
-player.CharacterAdded:Connect(function(char)
-    local hum = char:WaitForChild("Humanoid")
-    if speedLocked then
-        hum.WalkSpeed = lockedSpeed
-    end
+player.CharacterAdded:Connect(function(c)
+    local h = c:WaitForChild("Humanoid")
+    if speedLock then h.WalkSpeed = activeSpeed end
 end)
 
 -- Fast respawn
 local function fastRespawn()
     spawn(function()
-        pcall(function()
-            if player.Character and player.Character:FindFirstChild("Humanoid") then
-                player.Character:BreakJoints()
-            end
-        end)
+        pcall(function() if player.Character then player.Character:BreakJoints() end end)
         wait(0.5)
-        pcall(function()
-            if player.Character and player.Character:FindFirstChild("Humanoid") then
-                player.Character.Humanoid.Health = 0
-            end
-        end)
+        pcall(function() if player.Character and player.Character:FindFirstChild("Humanoid") then player.Character.Humanoid.Health = 0 end end)
     end)
 end
 
@@ -74,319 +54,278 @@ gui.Name = "NatSemiTP"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
-local bg = Color3.fromRGB(15, 15, 22)
-local accent = Color3.fromRGB(0, 255, 170)
-local accent2 = Color3.fromRGB(140, 90, 255)
-local white = Color3.fromRGB(255, 255, 255)
-local dark = Color3.fromRGB(22, 22, 32)
-local gray = Color3.fromRGB(130, 130, 145)
-local red = Color3.fromRGB(255, 55, 65)
-local blue = Color3.fromRGB(88, 101, 242)
-local orange = Color3.fromRGB(255, 170, 0)
-local pink = Color3.fromRGB(255, 100, 180)
+local bg = Color3.fromRGB(15,15,22)
+local grn = Color3.fromRGB(0,255,170)
+local pur = Color3.fromRGB(140,90,255)
+local wht = Color3.fromRGB(255,255,255)
+local drk = Color3.fromRGB(22,22,32)
+local gry = Color3.fromRGB(140,140,155)
+local red = Color3.fromRGB(255,55,65)
+local blu = Color3.fromRGB(88,101,242)
+local org = Color3.fromRGB(255,170,0)
+local pnk = Color3.fromRGB(255,100,180)
 
--- ===== D4 MINIMIZE ICON =====
-local d4 = Instance.new("TextButton")
-d4.Size = UDim2.new(0, 44, 0, 44)
-d4.Position = UDim2.new(0.02, 0, 0.02, 0)
-d4.Text = "NAT"
-d4.BackgroundColor3 = accent
-d4.TextColor3 = Color3.fromRGB(0, 0, 0)
-d4.Font = Enum.Font.GothamBlack
-d4.TextSize = 10
-d4.BorderSizePixel = 0
-d4.Visible = false
-d4.ZIndex = 10
-d4.Parent = gui
-Instance.new("UICorner", d4).CornerRadius = UDim.new(1, 0)
+-- ===== MINIMIZE ICON =====
+local ico = Instance.new("TextButton")
+ico.Size = UDim2.new(0,44,0,44)
+ico.Position = UDim2.new(0.02,0,0.02,0)
+ico.Text = "NAT"
+ico.BackgroundColor3 = grn
+ico.TextColor3 = Color3.fromRGB(0,0,0)
+ico.Font = Enum.Font.GothamBlack
+ico.TextSize = 10
+ico.BorderSizePixel = 0
+ico.Visible = false
+ico.ZIndex = 10
+ico.Parent = gui
+Instance.new("UICorner",ico).CornerRadius = UDim.new(1,0)
 
-local drag, moved, sPos, sFrame = false, false, nil, nil
-d4.InputBegan:Connect(function(i)
+-- Drag icon (alleen als unlocked)
+local icoLocked = true
+local dragging = false
+local moved = false
+local sPos = nil
+local sFrame = nil
+
+ico.InputBegan:Connect(function(i)
+    if icoLocked then return end
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-        drag, moved, sPos, sFrame = true, false, i.Position, d4.Position
+        dragging = true
+        moved = false
+        sPos = i.Position
+        sFrame = ico.Position
     end
 end)
-d4.InputEnded:Connect(function(i)
+ico.InputEnded:Connect(function(i)
+    if icoLocked then return end
     if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-        drag = false
+        dragging = false
         if not moved then
-            sf.Visible = true
             main.Visible = true
+            ico.Visible = false
         end
     end
 end)
 uis.InputChanged:Connect(function(i)
-    if drag and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
-        local d = i.Position - sPos
-        if math.abs(d.X) > 2 or math.abs(d.Y) > 2 then moved = true end
-        d4.Position = UDim2.new(sFrame.X.Scale, sFrame.X.Offset + d.X, sFrame.Y.Scale, sFrame.Y.Offset + d.Y)
+    if dragging and not icoLocked then
+        if i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch then
+            local d = i.Position - sPos
+            if math.abs(d.X) > 2 or math.abs(d.Y) > 2 then moved = true end
+            ico.Position = UDim2.new(sFrame.X.Scale, sFrame.X.Offset+d.X, sFrame.Y.Scale, sFrame.Y.Offset+d.Y)
+        end
     end
 end)
 
 -- ===== N TOGGLE =====
-local guiVisible = true
-uis.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
+local vis = true
+uis.InputBegan:Connect(function(input,gpe)
+    if gpe then return end
     if input.KeyCode == Enum.KeyCode.N then
-        guiVisible = not guiVisible
-        sf.Visible = guiVisible
-        main.Visible = guiVisible
-        d4.Visible = not guiVisible
+        vis = not vis
+        main.Visible = vis
+        ico.Visible = not vis
     end
 end)
 
--- ===== START FRAME =====
-local sf = Instance.new("Frame")
-sf.Size = UDim2.new(0, 350, 0, 260)
-sf.Position = UDim2.new(0.5, -175, 0.5, -130)
-sf.BackgroundColor3 = bg
-sf.BorderSizePixel = 0
-sf.Active = true
-sf.Draggable = true
-sf.Visible = true
-sf.Parent = gui
-Instance.new("UICorner", sf).CornerRadius = UDim.new(0, 14)
+-- ===== MAIN FRAME =====
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0,340,0,310)
+main.Position = UDim2.new(0.5,-170,0.5,-155)
+main.BackgroundColor3 = bg
+main.BorderSizePixel = 0
+main.Active = true
+main.Draggable = true
+main.Visible = true
+main.Parent = gui
+Instance.new("UICorner",main).CornerRadius = UDim.new(0,14)
 
-local sfs = Instance.new("UIStroke")
-sfs.Color = accent
-sfs.Thickness = 1.5
-sfs.Transparency = 0.4
-sfs.Parent = sf
+local mss = Instance.new("UIStroke")
+mss.Color = grn
+mss.Thickness = 1.5
+mss.Transparency = 0.4
+mss.Parent = main
 
-local sh = Instance.new("Frame")
-sh.Size = UDim2.new(1, 0, 0, 50)
-sh.BackgroundColor3 = Color3.fromRGB(10, 10, 16)
-sh.BorderSizePixel = 0
-sh.Parent = sf
-Instance.new("UICorner", sh).CornerRadius = UDim.new(0, 14)
+-- Header
+local hdr = Instance.new("Frame")
+hdr.Size = UDim2.new(1,0,0,52)
+hdr.BackgroundColor3 = Color3.fromRGB(10,10,16)
+hdr.BorderSizePixel = 0
+hdr.Parent = main
+Instance.new("UICorner",hdr).CornerRadius = UDim.new(0,14)
 
-local st = Instance.new("TextLabel")
-st.Size = UDim2.new(1, -80, 0, 50)
-st.Position = UDim2.new(0, 15, 0, 0)
-st.Text = "NAT SEMI TP"
-st.TextColor3 = white
-st.BackgroundTransparency = 1
-st.Font = Enum.Font.GothamBlack
-st.TextSize = 18
-st.Parent = sf
+-- Title
+local ttl = Instance.new("TextLabel")
+ttl.Size = UDim2.new(1,-100,0,52)
+ttl.Position = UDim2.new(0,15,0,0)
+ttl.Text = "NAT SEMI TP"
+ttl.TextColor3 = wht
+ttl.BackgroundTransparency = 1
+ttl.Font = Enum.Font.GothamBlack
+ttl.TextSize = 19
+ttl.Parent = main
+
+-- Lock positie knop
+local lockBtn = Instance.new("TextButton")
+lockBtn.Size = UDim2.new(0,26,0,26)
+lockBtn.Position = UDim2.new(1,-94,0,13)
+lockBtn.Text = "🔒"
+lockBtn.BackgroundColor3 = org
+lockBtn.TextColor3 = wht
+lockBtn.Font = Enum.Font.GothamBold
+lockBtn.TextSize = 14
+lockBtn.BorderSizePixel = 0
+lockBtn.AutoButtonColor = false
+lockBtn.Parent = main
+Instance.new("UICorner",lockBtn).CornerRadius = UDim.new(0,6)
+
+local isLocked = false
+lockBtn.MouseButton1Click:Connect(function()
+    isLocked = not isLocked
+    icoLocked = not icoLocked
+    main.Draggable = not isLocked
+    if isLocked then
+        lockBtn.Text = "🔓"
+        lockBtn.BackgroundColor3 = red
+    else
+        lockBtn.Text = "🔒"
+        lockBtn.BackgroundColor3 = org
+    end
+end)
 
 -- Minimize
 local minBtn = Instance.new("TextButton")
-minBtn.Size = UDim2.new(0, 26, 0, 26)
-minBtn.Position = UDim2.new(1, -62, 0, 12)
+minBtn.Size = UDim2.new(0,26,0,26)
+minBtn.Position = UDim2.new(1,-62,0,13)
 minBtn.Text = "_"
-minBtn.BackgroundColor3 = orange
-minBtn.TextColor3 = white
+minBtn.BackgroundColor3 = org
+minBtn.TextColor3 = wht
 minBtn.Font = Enum.Font.GothamBlack
 minBtn.TextSize = 16
 minBtn.BorderSizePixel = 0
 minBtn.AutoButtonColor = false
-minBtn.Parent = sf
-Instance.new("UICorner", minBtn).CornerRadius = UDim.new(0, 6)
+minBtn.Parent = main
+Instance.new("UICorner",minBtn).CornerRadius = UDim.new(0,6)
+minBtn.MouseButton1Click:Connect(function()
+    main.Visible = false
+    ico.Visible = true
+end)
 
 -- Close
-local cb = Instance.new("TextButton")
-cb.Size = UDim2.new(0, 26, 0, 26)
-cb.Position = UDim2.new(1, -34, 0, 12)
-cb.Text = "X"
-cb.BackgroundColor3 = red
-cb.TextColor3 = white
-cb.Font = Enum.Font.GothamBold
-cb.TextSize = 14
-cb.BorderSizePixel = 0
-cb.AutoButtonColor = false
-cb.Parent = sf
-Instance.new("UICorner", cb).CornerRadius = UDim.new(0, 6)
-cb.MouseButton1Click:Connect(function() gui:Destroy() end)
+local cls = Instance.new("TextButton")
+cls.Size = UDim2.new(0,26,0,26)
+cls.Position = UDim2.new(1,-34,0,13)
+cls.Text = "X"
+cls.BackgroundColor3 = red
+cls.TextColor3 = wht
+cls.Font = Enum.Font.GothamBold
+cls.TextSize = 14
+cls.BorderSizePixel = 0
+cls.AutoButtonColor = false
+cls.Parent = main
+Instance.new("UICorner",cls).CornerRadius = UDim.new(0,6)
+cls.MouseButton1Click:Connect(function() gui:Destroy() end)
 
--- Discord label
-local dcLabel = Instance.new("TextLabel")
-dcLabel.Size = UDim2.new(1, -20, 0, 20)
-dcLabel.Position = UDim2.new(0, 10, 0, 0.22)
-dcLabel.Text = "Join Discord for updates:"
-dcLabel.TextColor3 = gray
-dcLabel.BackgroundTransparency = 1
-dcLabel.Font = Enum.Font.SourceSans
-dcLabel.TextSize = 12
-dcLabel.Parent = sf
+-- Discord sectie
+local dcTxt = Instance.new("TextLabel")
+dcTxt.Size = UDim2.new(1,-30,0,18)
+dcTxt.Position = UDim2.new(0,15,0,0.20)
+dcTxt.Text = "📢 discord.gg/4cXDtZ2J4"
+dcTxt.TextColor3 = blu
+dcTxt.BackgroundTransparency = 1
+dcTxt.Font = Enum.Font.SourceSansBold
+dcTxt.TextSize = 12
+dcTxt.Parent = main
 
-local dcLink = Instance.new("TextLabel")
-dcLink.Size = UDim2.new(1, -20, 0, 24)
-dcLink.Position = UDim2.new(0, 10, 0, 0.31)
-dcLink.Text = "discord.gg/4cXDtZ2J4"
-dcLink.TextColor3 = blue
-dcLink.BackgroundTransparency = 1
-dcLink.Font = Enum.Font.SourceSansBold
-dcLink.TextSize = 13
-dcLink.Parent = sf
-
--- Copy Discord button
-local copyBtn = Instance.new("TextButton")
-copyBtn.Size = UDim2.new(0.85, 0, 0, 30)
-copyBtn.Position = UDim2.new(0.075, 0, 0.42)
-copyBtn.Text = "COPY DISCORD LINK"
-copyBtn.BackgroundColor3 = blue
-copyBtn.TextColor3 = white
-copyBtn.Font = Enum.Font.GothamBold
-copyBtn.TextSize = 11
-copyBtn.BorderSizePixel = 0
-copyBtn.Parent = sf
-Instance.new("UICorner", copyBtn).CornerRadius = UDim.new(0, 7)
-copyBtn.MouseButton1Click:Connect(function()
+local dcBtn = Instance.new("TextButton")
+dcBtn.Size = UDim2.new(0.88,0,0,30)
+dcBtn.Position = UDim2.new(0.06,0,0.27)
+dcBtn.Text = "COPY DISCORD"
+dcBtn.BackgroundColor3 = blu
+dcBtn.TextColor3 = wht
+dcBtn.Font = Enum.Font.GothamBold
+dcBtn.TextSize = 11
+dcBtn.BorderSizePixel = 0
+dcBtn.Parent = main
+Instance.new("UICorner",dcBtn).CornerRadius = UDim.new(0,7)
+dcBtn.MouseButton1Click:Connect(function()
     pcall(function() setclipboard("https://discord.gg/4cXDtZ2J4") end)
-    copyBtn.Text = "COPIED!"
+    dcBtn.Text = "COPIED!"
     wait(1.5)
-    copyBtn.Text = "COPY DISCORD LINK"
+    dcBtn.Text = "COPY DISCORD"
 end)
 
--- Enter button
-local enterBtn = Instance.new("TextButton")
-enterBtn.Size = UDim2.new(0.85, 0, 0, 34)
-enterBtn.Position = UDim2.new(0.075, 0, 0.55)
-enterBtn.Text = "ENTER HUB"
-enterBtn.BackgroundColor3 = accent
-enterBtn.TextColor3 = Color3.fromRGB(0, 0, 0)
-enterBtn.Font = Enum.Font.GothamBlack
-enterBtn.TextSize = 13
-enterBtn.BorderSizePixel = 0
-enterBtn.Parent = sf
-Instance.new("UICorner", enterBtn).CornerRadius = UDim.new(0, 7)
+-- ===== SPEED BOOST SECTION =====
+local spdTxt = Instance.new("TextLabel")
+spdTxt.Size = UDim2.new(1,-30,0,18)
+spdTxt.Position = UDim2.new(0,15,0,0.39)
+spdTxt.Text = "🏃 SPEED BOOST"
+spdTxt.TextColor3 = grn
+spdTxt.BackgroundTransparency = 1
+spdTxt.Font = Enum.Font.GothamBold
+spdTxt.TextSize = 12
+spdTxt.Parent = main
 
--- Respawn button
-local respawnBtn = Instance.new("TextButton")
-respawnBtn.Size = UDim2.new(0.85, 0, 0, 34)
-respawnBtn.Position = UDim2.new(0.075, 0, 0.69)
-respawnBtn.Text = "FAST RESPAWN (0.5s)"
-respawnBtn.BackgroundColor3 = pink
-respawnBtn.TextColor3 = white
-respawnBtn.Font = Enum.Font.GothamBold
-respawnBtn.TextSize = 12
-respawnBtn.BorderSizePixel = 0
-respawnBtn.Parent = sf
-Instance.new("UICorner", respawnBtn).CornerRadius = UDim.new(0, 7)
-respawnBtn.MouseButton1Click:Connect(function() fastRespawn() end)
-
--- ===== MAIN FRAME =====
-local main = Instance.new("Frame")
-main.Size = UDim2.new(0, 350, 0, 180)
-main.Position = UDim2.new(0.5, -175, 0.5, -90)
-main.BackgroundColor3 = bg
-main.BorderSizePixel = 0
-main.Visible = false
-main.Active = true
-main.Draggable = true
-main.Parent = gui
-Instance.new("UICorner", main).CornerRadius = UDim.new(0, 14)
-
-local ms = Instance.new("UIStroke")
-ms.Color = accent
-ms.Thickness = 1.5
-ms.Transparency = 0.4
-ms.Parent = main
-
-local mh = Instance.new("Frame")
-mh.Size = UDim2.new(1, 0, 0, 50)
-mh.BackgroundColor3 = Color3.fromRGB(10, 10, 16)
-mh.Parent = main
-Instance.new("UICorner", mh).CornerRadius = UDim.new(0, 14)
-
-local mt = Instance.new("TextLabel")
-mt.Size = UDim2.new(1, -40, 0, 50)
-mt.Position = UDim2.new(0, 15, 0, 0)
-mt.Text = "SPEED BOOST"
-mt.TextColor3 = white
-mt.BackgroundTransparency = 1
-mt.Font = Enum.Font.GothamBlack
-mt.TextSize = 16
-mt.Parent = main
-
--- Minimize main
-local minBtn2 = Instance.new("TextButton")
-minBtn2.Size = UDim2.new(0, 26, 0, 26)
-minBtn2.Position = UDim2.new(1, -62, 0, 12)
-minBtn2.Text = "_"
-minBtn2.BackgroundColor3 = orange
-minBtn2.TextColor3 = white
-minBtn2.Font = Enum.Font.GothamBlack
-minBtn2.TextSize = 16
-minBtn2.BorderSizePixel = 0
-minBtn2.AutoButtonColor = false
-minBtn2.Parent = main
-Instance.new("UICorner", minBtn2).CornerRadius = UDim.new(0, 6)
-
-local cb2 = Instance.new("TextButton")
-cb2.Size = UDim2.new(0, 26, 0, 26)
-cb2.Position = UDim2.new(1, -34, 0, 12)
-cb2.Text = "X"
-cb2.BackgroundColor3 = red
-cb2.TextColor3 = white
-cb2.Font = Enum.Font.GothamBold
-cb2.TextSize = 14
-cb2.BorderSizePixel = 0
-cb2.AutoButtonColor = false
-cb2.Parent = main
-Instance.new("UICorner", cb2).CornerRadius = UDim.new(0, 6)
-cb2.MouseButton1Click:Connect(function() gui:Destroy() end)
-
--- Enter actie
-enterBtn.MouseButton1Click:Connect(function()
-    sf.Visible = false
-    main.Visible = true
-end)
-
--- Minimize acties
-minBtn.MouseButton1Click:Connect(function()
-    sf.Visible = false
-    main.Visible = false
-    d4.Visible = true
-end)
-
-minBtn2.MouseButton1Click:Connect(function()
-    sf.Visible = false
-    main.Visible = false
-    d4.Visible = true
-end)
-
--- Speed Boost (29)
 local sp = Instance.new("TextButton")
-sp.Size = UDim2.new(0.85, 0, 0, 36)
-sp.Position = UDim2.new(0.075, 0, 0.3)
+sp.Size = UDim2.new(0.88,0,0,34)
+sp.Position = UDim2.new(0.06,0,0.45)
 sp.Text = "SPEED BOOST (29)"
-sp.BackgroundColor3 = accent
-sp.TextColor3 = Color3.fromRGB(0, 0, 0)
+sp.BackgroundColor3 = grn
+sp.TextColor3 = Color3.fromRGB(0,0,0)
 sp.Font = Enum.Font.GothamBlack
 sp.TextSize = 13
 sp.BorderSizePixel = 0
 sp.Parent = main
-Instance.new("UICorner", sp).CornerRadius = UDim.new(0, 8)
-sp.MouseButton1Click:Connect(function() applySpeed(29) end)
+Instance.new("UICorner",sp).CornerRadius = UDim.new(0,8)
+sp.MouseButton1Click:Connect(function() boost(29) end)
 
--- Giant Speed (34)
 local gp = Instance.new("TextButton")
-gp.Size = UDim2.new(0.85, 0, 0, 36)
-gp.Position = UDim2.new(0.075, 0, 0.5)
+gp.Size = UDim2.new(0.88,0,0,34)
+gp.Position = UDim2.new(0.06,0,0.56)
 gp.Text = "GIANT SPEED (34)"
-gp.BackgroundColor3 = accent2
-gp.TextColor3 = white
+gp.BackgroundColor3 = pur
+gp.TextColor3 = wht
 gp.Font = Enum.Font.GothamBlack
 gp.TextSize = 13
 gp.BorderSizePixel = 0
 gp.Parent = main
-Instance.new("UICorner", gp).CornerRadius = UDim.new(0, 8)
-gp.MouseButton1Click:Connect(function() applySpeed(34) end)
+Instance.new("UICorner",gp).CornerRadius = UDim.new(0,8)
+gp.MouseButton1Click:Connect(function() boost(34) end)
 
--- Reset (16)
 local rp = Instance.new("TextButton")
-rp.Size = UDim2.new(0.85, 0, 0, 36)
-rp.Position = UDim2.new(0.075, 0, 0.7)
+rp.Size = UDim2.new(0.88,0,0,34)
+rp.Position = UDim2.new(0.06,0,0.67)
 rp.Text = "RESET SPEED (16)"
 rp.BackgroundColor3 = red
-rp.TextColor3 = white
+rp.TextColor3 = wht
 rp.Font = Enum.Font.GothamBlack
 rp.TextSize = 13
 rp.BorderSizePixel = 0
 rp.Parent = main
-Instance.new("UICorner", rp).CornerRadius = UDim.new(0, 8)
-rp.MouseButton1Click:Connect(function() resetSpeed() end)
+Instance.new("UICorner",rp).CornerRadius = UDim.new(0,8)
+rp.MouseButton1Click:Connect(function() resetSpd() end)
 
-print("NAT SEMI TP Loaded!")
+-- ===== RESPAWN SECTION =====
+local rspTxt = Instance.new("TextLabel")
+rspTxt.Size = UDim2.new(1,-30,0,18)
+rspTxt.Position = UDim2.new(0,15,0,0.80)
+rspTxt.Text = "💀 RESPAWN"
+rspTxt.TextColor3 = pnk
+rspTxt.BackgroundTransparency = 1
+rspTxt.Font = Enum.Font.GothamBold
+rspTxt.TextSize = 12
+rspTxt.Parent = main
+
+local rspBtn = Instance.new("TextButton")
+rspBtn.Size = UDim2.new(0.88,0,0,34)
+rspBtn.Position = UDim2.new(0.06,0,0.86)
+rspBtn.Text = "FAST RESPAWN (0.5s)"
+rspBtn.BackgroundColor3 = pnk
+rspBtn.TextColor3 = wht
+rspBtn.Font = Enum.Font.GothamBlack
+rspBtn.TextSize = 12
+rspBtn.BorderSizePixel = 0
+rspBtn.Parent = main
+Instance.new("UICorner",rspBtn).CornerRadius = UDim.new(0,8)
+rspBtn.MouseButton1Click:Connect(function() fastRespawn() end)
+
+print("NAT SEMI TP v2.5 Final Loaded!")

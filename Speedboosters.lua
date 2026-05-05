@@ -118,7 +118,6 @@ speedContainer.BackgroundTransparency = 1
 speedContainer.Parent = contentFrame
 speedContainer.Visible = false
 
--- Show speed options on Enter Hub click
 enterHubBtn.MouseButton1Click:Connect(function()
     speedContainer.Visible = true
 end)
@@ -161,7 +160,6 @@ local function _0xToggleSpeed(state)
     end
 end
 
--- Create speed buttons
 createSpeedButton("Speed Boost (29)", 29)
 createSpeedButton("Giant Potion (34)", 34)
 

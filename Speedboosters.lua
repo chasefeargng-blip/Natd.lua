@@ -1,191 +1,116 @@
--- Main toggle button to open/close GUI
-local toggleBtn = Instance.new("TextButton")
-toggleBtn.Parent = game.CoreGui
-toggleBtn.Position = UDim2.new(0, 10, 0, 10)
-toggleBtn.Size = UDim2.new(0, 100, 0, 50)
-toggleBtn.Text = "Open GUI"
-toggleBtn.BackgroundColor3 = Color3.new(0, 0.5, 1)
+local player = game.Players.LocalPlayer
+local rs = game:GetService("RunService")
 
-local guiEnabled = false
+local active = false
+local speedVal = 16
 
-toggleBtn.MouseButton1Click:Connect(function()
-    guiEnabled = not guiEnabled
-    mainGui.Enabled = guiEnabled
-    toggleBtn.Text = guiEnabled and "Close GUI" or "Open GUI"
-end)
-
--- Main GUI setup
-local mainGui = Instance.new("ScreenGui")
-mainGui.Name = "NatSemiTPGui"
-mainGui.Enabled = false
-mainGui.Parent = game.CoreGui
-
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 300, 0, 400)
-frame.Position = UDim2.new(0.5, -150, 0.5, -200)
-frame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
-frame.Parent = mainGui
-
--- Draggable support
-local dragging = false
-local dragInput, dragStart, startPos
-
-frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = frame.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
+-- Force speed elke 0.01 sec
+spawn(function()
+    while true do
+        if active then
+            local c = player.Character
+            if c then
+                local h = c:FindFirstChild("Humanoid")
+                if h then
+                    h.WalkSpeed = speedVal
+                end
             end
-        end)
+        end
+        wait(0.01)
     end
 end)
 
-frame.InputChanged:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        dragInput = input
+player.CharacterAdded:Connect(function(c)
+    local h = c:WaitForChild("Humanoid")
+    if active then
+        h.WalkSpeed = speedVal
     end
 end)
 
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if dragging and input == dragInput then
-        local delta = input.Position - dragStart
-        frame.Position = startPos + UDim2.new(0, delta.X, 0, delta.Y)
+-- GUI
+local gui = Instance.new("ScreenGui")
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local f = Instance.new("Frame")
+f.Size = UDim2.new(0, 220, 0, 200)
+f.Position = UDim2.new(0, 10, 0, 10)
+f.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+f.Draggable = true
+f.Active = true
+f.Parent = gui
+Instance.new("UICorner", f).CornerRadius = UDim.new(0, 8)
+
+local t = Instance.new("TextLabel")
+t.Size = UDim2.new(1, 0, 0, 30)
+t.Text = "NAT SEMI TP"
+t.TextColor3 = Color3.fromRGB(0, 255, 170)
+t.BackgroundColor3 = Color3.fromRGB(18, 18, 28)
+t.Font = Enum.Font.GothamBlack
+t.TextSize = 14
+t.Parent = f
+
+-- Speed 29
+local b1 = Instance.new("TextButton")
+b1.Size = UDim2.new(1, -20, 0, 35)
+b1.Position = UDim2.new(0, 10, 0, 40)
+b1.Text = "SPEED (29)"
+b1.BackgroundColor3 = Color3.fromRGB(0, 255, 170)
+b1.TextColor3 = Color3.fromRGB(0, 0, 0)
+b1.Font = Enum.Font.GothamBlack
+b1.TextSize = 13
+b1.Parent = f
+Instance.new("UICorner", b1).CornerRadius = UDim.new(0, 6)
+b1.MouseButton1Click:Connect(function()
+    active = true
+    speedVal = 29
+end)
+
+-- Giant 34
+local b2 = Instance.new("TextButton")
+b2.Size = UDim2.new(1, -20, 0, 35)
+b2.Position = UDim2.new(0, 10, 0, 82)
+b2.Text = "GIANT (34)"
+b2.BackgroundColor3 = Color3.fromRGB(140, 90, 255)
+b2.TextColor3 = Color3.fromRGB(255, 255, 255)
+b2.Font = Enum.Font.GothamBlack
+b2.TextSize = 13
+b2.Parent = f
+Instance.new("UICorner", b2).CornerRadius = UDim.new(0, 6)
+b2.MouseButton1Click:Connect(function()
+    active = true
+    speedVal = 34
+end)
+
+-- Reset
+local b3 = Instance.new("TextButton")
+b3.Size = UDim2.new(1, -20, 0, 35)
+b3.Position = UDim2.new(0, 10, 0, 124)
+b3.Text = "RESET (16)"
+b3.BackgroundColor3 = Color3.fromRGB(255, 55, 65)
+b3.TextColor3 = Color3.fromRGB(255, 255, 255)
+b3.Font = Enum.Font.GothamBlack
+b3.TextSize = 13
+b3.Parent = f
+Instance.new("UICorner", b3).CornerRadius = UDim.new(0, 6)
+b3.MouseButton1Click:Connect(function()
+    active = false
+    speedVal = 16
+    local c = player.Character
+    if c then
+        local h = c:FindFirstChild("Humanoid")
+        if h then h.WalkSpeed = 16 end
     end
 end)
 
--- Title bar with Minimize and Close buttons
-local titleBar = Instance.new("Frame")
-titleBar.Size = UDim2.new(1, 0, 0, 30)
-titleBar.BackgroundColor3 = Color3.new(0.1, 0.1, 0.1)
-titleBar.Parent = frame
-
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Text = "Nat Semi TP"
-titleLabel.Size = UDim2.new(1, -60, 1, 0)
-titleLabel.Position = UDim2.new(0, 60, 0, 0)
-titleLabel.BackgroundTransparency = 1
-titleLabel.TextColor3 = Color3.new(1, 1, 1)
-titleLabel.Parent = titleBar
-
-local minimizeBtn = Instance.new("TextButton")
-minimizeBtn.Text = "-"
-minimizeBtn.Size = UDim2.new(0, 30, 1, 0)
-minimizeBtn.Position = UDim2.new(1, -60, 0, 0)
-minimizeBtn.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
-minimizeBtn.Parent = titleBar
-
-local closeBtn = Instance.new("TextButton")
-closeBtn.Text = "X"
-closeBtn.Size = UDim2.new(0, 30, 1, 0)
-closeBtn.Position = UDim2.new(1, -30, 0, 0)
-closeBtn.BackgroundColor3 = Color3.new(0.8, 0.2, 0.2)
-closeBtn.Parent = titleBar
-
-local contentFrame = Instance.new("Frame")
-contentFrame.Size = UDim2.new(1, 0, 1, -30)
-contentFrame.Position = UDim2.new(0, 0, 0, 30)
-contentFrame.BackgroundTransparency = 1
-contentFrame.Parent = frame
-
-local isMinimized = false
-
-minimizeBtn.MouseButton1Click:Connect(function()
-    isMinimized = not isMinimized
-    contentFrame.Visible = not isMinimized
-end)
-
-closeBtn.MouseButton1Click:Connect(function()
-    mainGui.Enabled = false
-    toggleBtn.Text = "Open GUI"
-end)
-
--- Enter Hub Button
-local enterHubBtn = Instance.new("TextButton")
-enterHubBtn.Size = UDim2.new(0, 200, 0, 50)
-enterHubBtn.Position = UDim2.new(0, 50, 0, 20)
-enterHubBtn.Text = "Enter Hub"
-enterHubBtn.BackgroundColor3 = Color3.new(0, 0.5, 1)
-enterHubBtn.Parent = contentFrame
-
--- Container for speed buttons
-local speedContainer = Instance.new("Frame")
-speedContainer.Size = UDim2.new(1, -20, 0, 200)
-speedContainer.Position = UDim2.new(0, 10, 0, 80)
-speedContainer.BackgroundTransparency = 1
-speedContainer.Parent = contentFrame
-speedContainer.Visible = false
-
-enterHubBtn.MouseButton1Click:Connect(function()
-    speedContainer.Visible = true
-end)
-
--- Speed Mode Buttons
-local function createSpeedButton(text, speed)
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, -20, 0, 50)
-    btn.Position = UDim2.new(0, 10, 0, 10 + (#speedContainer:GetChildren() - 1) * 60)
-    btn.Text = text
-    btn.BackgroundColor3 = Color3.new(0, 1, 0)
-    btn.Parent = speedContainer
-
-    btn.MouseButton1Click:Connect(function()
-        _0xSpeed = speed
-        _0xToggleSpeed(true)
-    end)
-end
-
--- Speed control variables
-local _0x1a2b3c = game:GetService("RunService")
-local _0x4d5e6f = game.Players.LocalPlayer
-local _0xSpeed = 16
-local _0xActive = false
-
-local function _0xSetSpeed(v)
-    local chr = _0x4d5e6f.Character
-    if chr then
-        local hum = chr:FindFirstChild("Humanoid")
-        if hum then hum.WalkSpeed = v end
-    end
-end
-
-local function _0xToggleSpeed(state)
-    _0xActive = state
-    if state then
-        _0xSetSpeed(_0xSpeed)
-    else
-        _0xSetSpeed(16)
-    end
-end
-
-createSpeedButton("Speed Boost (29)", 29)
-createSpeedButton("Giant Potion (34)", 34)
-
--- Reset button
-local resetBtn = Instance.new("TextButton")
-resetBtn.Size = UDim2.new(0, 200, 0, 50)
-resetBtn.Position = UDim2.new(0, 50, 0, 200)
-resetBtn.Text = "Reset (16)"
-resetBtn.BackgroundColor3 = Color3.new(1, 0, 0)
-resetBtn.Parent = contentFrame
-
-resetBtn.MouseButton1Click:Connect(function()
-    _0xSpeed = 16
-    _0xToggleSpeed(false)
-end)
-
--- Keep speed consistent
-game:GetService("RunService").Heartbeat:Connect(function()
-    if _0xActive then
-        _0xSetSpeed(_0xSpeed)
-    end
-end)
-
--- Reapply speed on respawn
-_0x4d5e6f.CharacterAdded:Connect(function()
-    if _0xActive then
-        _0xSetSpeed(_0xSpeed)
-    end
-end)
+-- Close
+local x = Instance.new("TextButton")
+x.Size = UDim2.new(0, 20, 0, 20)
+x.Position = UDim2.new(1, -24, 0, 5)
+x.Text = "X"
+x.TextColor3 = Color3.fromRGB(255, 255, 255)
+x.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+x.Font = Enum.Font.GothamBold
+x.TextSize = 11
+x.Parent = f
+Instance.new("UICorner", x).CornerRadius = UDim.new(0, 4)
+x.MouseButton1Click:Connect(function() gui:Destroy() end)
